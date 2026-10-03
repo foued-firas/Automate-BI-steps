@@ -26,37 +26,27 @@ def _table(headers: list[str], rows: list[list]) -> str:
 
 
 def write_markdown(profiling: dict, path: Path) -> None:
+    """Les sections reprennent les noms et l'ordre de la spec (section `profiling`)."""
     meta, summary = profiling["metadata"], profiling["summary"]
     out = [
         "# Rapport de profilage — Agent 1",
         "",
-        f"- **Exécution** : `{meta['run_id']}` — {meta['generated_at']}",
-        f"- **Dossier source** : `{meta['source_dir']}`",
-        f"- **Version de la spec** : {meta['spec_version']}",
-        f"- **LLM** : {meta['llm']['model'] if meta['llm']['enabled'] else 'désactivé'}"
+        "## metadata",
+        "",
+        f"- **run_id** : `{meta['run_id']}`",
+        f"- **generated_at** : {meta['generated_at']}",
+        f"- **source_dir** : `{meta['source_dir']}`",
+        f"- **spec_version** : {meta['spec_version']}",
+        f"- **llm** : {meta['llm']['model'] if meta['llm']['enabled'] else 'désactivé'}"
         f" ({meta['llm']['status']})",
         "",
-        "## Synthèse",
-        "",
-        summary.get("narrative", ""),
-        "",
-        f"- Tables : **{summary['tables_count']}** — lignes : **{summary['total_rows']}**",
-        f"- Problèmes détectés : **{summary['issues_count']}** "
-        + " · ".join(f"{SEVERITY_ICON[s]} {s} : {n}"
-                     for s, n in summary["issues_by_severity"].items()),
-        f"- Score global de qualité : **{summary['global_quality_score']} / 100**",
-        f"- Prêt pour le nettoyage : **{'oui' if summary['ready_for_cleaning'] else 'non'}**",
-        "",
-        _table(["Table", "Score qualité"],
-               [[t, s] for t, s in summary["quality_score_by_table"].items()]),
-        "",
-        "## Fichiers",
+        "### files",
         "",
         _table(["Fichier", "Taille (octets)", "Encodage", "Séparateur", "En-tête", "Statut"],
                [[f["file_name"], f["size_bytes"], f["encoding"], repr(f["delimiter"]),
                  f["has_header"], f["read_status"]] for f in meta["files"]]),
         "",
-        "## Tables et colonnes",
+        "## tables",
     ]
     for t in profiling["tables"]:
         out += [
@@ -77,7 +67,7 @@ def write_markdown(profiling: dict, path: Path) -> None:
         ]
     out += [
         "",
-        "## Relations",
+        "## relationships",
         "",
         _table(["ID", "De", "Vers", "Cardinalité", "Correspondance %", "Orphelins",
                 "Méthode", "Confiance"],
@@ -86,7 +76,7 @@ def write_markdown(profiling: dict, path: Path) -> None:
                  r["orphan_count"], r["detection_method"], r["confidence"]]
                 for r in profiling["relationships"]]),
         "",
-        "## Problèmes de qualité",
+        "## issues",
         "",
         _table(["ID", "Sévérité", "Table", "Colonne", "Type", "Lignes (%)", "Description",
                 "Exemples", "Action suggérée", "Attendu", "Source"],
@@ -95,6 +85,24 @@ def write_markdown(profiling: dict, path: Path) -> None:
                  i["description"], i["examples"][:3], i["suggested_action"],
                  "oui" if i["is_expected"] else "non", i["detected_by"]]
                 for i in profiling["issues"]]),
+        "",
+        "## summary",
+        "",
+        summary.get("narrative", ""),
+        "",
+        f"- Tables : **{summary['tables_count']}** — lignes : **{summary['total_rows']}**",
+        f"- Problèmes détectés : **{summary['issues_count']}** "
+        + " · ".join(f"{SEVERITY_ICON[s]} {s} : {n}"
+                     for s, n in summary["issues_by_severity"].items()),
+        f"- Score global de qualité : **{summary['global_quality_score']} / 100**",
+        f"- Prêt pour le nettoyage : **{'oui' if summary['ready_for_cleaning'] else 'non'}**",
+        "",
+        _table(["Table", "Score qualité"],
+               [[t, s] for t, s in summary["quality_score_by_table"].items()]),
+        "",
+        "## artifacts",
+        "",
+        *[f"- **{k}** : `{v}`" for k, v in profiling.get("artifacts", {}).items()],
         "",
     ]
     path.write_text("\n".join(out), encoding="utf-8")
