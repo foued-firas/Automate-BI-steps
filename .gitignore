@@ -8,7 +8,7 @@ __pycache__/
 *.py[cod]
 
 # Rapports générés par les agents
-outputs/
+
 
 # Éditeurs / système
 .vscode/
