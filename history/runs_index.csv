@@ -1,0 +1,10 @@
+run_id,finished_at,files,tables,steps_applied,issues_flagged,status
+clean_20260930T193220375912Z,2026-09-30T19:32:22+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,22,6,WARN
+clean_20260930T193301409967Z,2026-09-30T19:33:02+00:00,clients_sale.csv | ventes_sale.xlsx,4,28,9,WARN
+clean_20260930T194206812166Z,2026-09-30T19:42:09+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,22,6,WARN
+clean_20260930T194236093794Z,2026-09-30T19:42:38+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,22,6,WARN
+clean_20260930T201259042524Z,2026-09-30T20:13:16+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,20,6,WARN
+clean_20260930T201720749630Z,2026-09-30T20:17:38+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,21,6,WARN
+clean_20260930T213550207058Z,2026-09-30T21:40:07+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,23,2,WARN
+clean_20260930T222722898194Z,2026-09-30T22:28:08+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,25,2,WARN
+clean_20261001T100846287596Z,2026-10-01T10:10:33+00:00,categories.csv | customers.csv | employees.csv | order_details.csv | orders.csv | products.csv | shippers.csv,7,24,2,WARN

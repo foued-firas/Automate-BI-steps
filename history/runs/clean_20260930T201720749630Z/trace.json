@@ -1,0 +1,812 @@
+{
+  "run_id": "clean_20260930T201720749630Z",
+  "finished_at": "2026-09-30T20:17:38+00:00",
+  "inputs": [
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\ee8964cb1ecf\\uploads\\categories.csv",
+      "sha256": "247a58c07dab5c39622ad4bf6fdacf3c8c688da5e418922d6049f29e8072a48b",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "categories"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\ee8964cb1ecf\\uploads\\customers.csv",
+      "sha256": "1108622425a4224d622576de7541b9cd5990239fb7a0934b19a5c806f4cb5367",
+      "encoding": "cp1252",
+      "delimiter": ",",
+      "tables": [
+        "customers"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\ee8964cb1ecf\\uploads\\employees.csv",
+      "sha256": "5ff38be204c857b820fc7ab213f8e7a884673f7ba6b0abfa62bbb237165e342b",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "employees"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\ee8964cb1ecf\\uploads\\order_details.csv",
+      "sha256": "c3ff191cf94ae777ed07e8633f1afd82328e1942a876a9d0df4648b3bbd35ce8",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "order_details"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\ee8964cb1ecf\\uploads\\orders.csv",
+      "sha256": "9f6138249c696169c48a75c3af1f4329031873e2cca269336078fe079772ccf6",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "orders"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\ee8964cb1ecf\\uploads\\products.csv",
+      "sha256": "004a8ac1cecbf5e1f1d3a504ff9fea20a422daeffd466bab990c9af6e449c1f4",
+      "encoding": "cp1252",
+      "delimiter": ",",
+      "tables": [
+        "products"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\ee8964cb1ecf\\uploads\\shippers.csv",
+      "sha256": "5776d698415453e46960334d4e79abf2d68e152fb02c661837fbc8103704d7b3",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "shippers"
+      ]
+    }
+  ],
+  "tables": {
+    "categories": {
+      "source": "categories.csv",
+      "rows_before": 8,
+      "cols_before": 3,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 1,
+        "timestamp": "2026-09-30T20:17:23+00:00",
+        "analysis": "Table 'categories' contient 8 lignes, 3 colonnes, aucune valeur manquante, chaque ligne représente une catégorie unique ; grain probable au niveau de la catégorie, clé primaire probable = categoryID, qualité élevée, risque minimal de perte d'information métier lors de la conversion numérique car les IDs sont simples sans zéros initiaux",
+        "table_role": "dimension",
+        "recommendations": [
+          "Vérifier que les clés categoryID ne contiennent jamais de zéros initiaux avant de les convertir",
+          "Ajouter un flag_duplicate_keys pour confirmer l'unicité des IDs",
+          "Conserver categoryName et description tels quels, aucun nettoyage supplémentaire nécessaire"
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "Conversion en nombre de categoryID est sûre, les valeurs sont déjà numériques et ne comportent pas de zéros initiaux, ce qui facilite les jointures"
+          }
+        }
+      },
+      "rows_after": 8,
+      "cols_after": 3
+    },
+    "customers": {
+      "source": "customers.csv",
+      "rows_before": 91,
+      "cols_before": 6,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 1,
+        "timestamp": "2026-09-30T20:17:25+00:00",
+        "analysis": "Table customers, probablement une dimension client avec grain d'une ligne par client (customerID unique). Les colonnes sont toutes de type texte, aucune valeur manquante, distinctes, donc la qualité est élevée. Risques majeurs : perte d'information métier si on modifie le format des identifiants ou des codes, mais le nettoyage proposé est sans risque.",
+        "table_role": "dimension",
+        "recommendations": [
+          "Vérifier manuellement l'absence d'espaces internes pertinents dans les noms d'entreprise",
+          "Appliquer éventuellement normalize_country sur la colonne country",
+          "Utiliser flag_duplicate_keys pour confirmer l'unicité de customerID",
+          "Contrôler l'encodage des caractères accentués avec fix_encoding si besoin"
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "Le trim des espaces superflus sur companyName ne supprime aucune donnée métier et améliore la cohérence des libellés."
+          }
+        }
+      },
+      "rows_after": 91,
+      "cols_after": 6
+    },
+    "employees": {
+      "source": "employees.csv",
+      "rows_before": 9,
+      "cols_before": 6,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 3,
+        "timestamp": "2026-09-30T20:17:27+00:00",
+        "analysis": "Table employees semble être une dimension avec grain d'employé unique, clé probable employeeID (distinct=9, pas de null). Les colonnes sont majoritairement textuelles, mais employeeID et reportsTo contiennent uniquement des chiffres sans zéros initiaux. Une valeur manquante apparaît dans reportsTo (manager inconnu). Risque principal : la conversion numérique pourrait casser des jointures si d'autres tables utilisent des chaînes pour ces IDs.",
+        "table_role": "dimension",
+        "recommendations": [
+          "Vérifier la cohérence du type de données employeeID et reportsTo avec les tables de faits ou de hiérarchie avant de les convertir.",
+          "Confirmer la politique d'imputation ou de gestion des valeurs manquantes de reportsTo (ex. manager top‑niveau).",
+          "Exécuter le flag_duplicate_keys pour s'assurer qu'employeeID reste unique."
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "employeeID ne comporte pas de zéros initiaux et est uniquement numérique, la conversion en nombre ne perd aucune information métier."
+          },
+          "2": {
+            "accept": true,
+            "reason": "reportsTo est également numérique et la conversion garde la valeur null, aucune perte d'information."
+          },
+          "3": {
+            "accept": true,
+            "reason": "flag_missing est un outil de signalement qui ne modifie pas les données et aide à repérer les managers manquants."
+          }
+        }
+      },
+      "rows_after": 9,
+      "cols_after": 6
+    },
+    "order_details": {
+      "source": "order_details.csv",
+      "rows_before": 2155,
+      "cols_before": 5,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 7,
+        "timestamp": "2026-09-30T20:17:29+00:00",
+        "analysis": "La table order_details représente probablement le grain ligne de commande (détail d'une commande) avec les colonnes orderID, productID, unitPrice, quantity et discount. Les colonnes sont actuellement de type texte mais contiennent uniquement des valeurs numériques, sans zéros initiaux apparents. Aucun null n'est présent, le nombre de lignes (2155) et de distincts indique une granularité fine. Le risque principal serait de perdre des informations d'identifiant si des zéros initiaux existaient, ce qui n'est pas le cas ici. Les flags d'anomalies sont utiles pour la validation métier.",
+        "table_role": "fait",
+        "recommendations": [
+          "Vérifier auprès du propriétaire métier que les seuils d'outliers (unitPrice, quantity) sont pertinents.",
+          "Confirmer que la conversion de orderID et productID en numérique n'affecte pas d'éventuelles jointures externes basées sur des chaînes.",
+          "S'assurer que les valeurs négatives ou nulles n'apparaissent pas après conversion (ex. discount)."
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "Conversion sûre en nombre, aucun zéro initial détecté."
+          },
+          "2": {
+            "accept": true,
+            "reason": "Conversion sûre en nombre, les IDs sont purement numériques."
+          },
+          "3": {
+            "accept": true,
+            "reason": "unitPrice doit être numérique pour les calculs de prix."
+          },
+          "4": {
+            "accept": true,
+            "reason": "quantity doit être numérique pour les agrégations."
+          },
+          "5": {
+            "accept": true,
+            "reason": "discount est un taux numérique, conversion appropriée."
+          },
+          "6": {
+            "accept": true,
+            "reason": "Flag d'outliers conservé, aucune modification des données."
+          },
+          "7": {
+            "accept": true,
+            "reason": "Flag d'outliers conservé, aucune modification des données."
+          }
+        }
+      },
+      "rows_after": 2155,
+      "cols_after": 5
+    },
+    "orders": {
+      "source": "orders.csv",
+      "rows_before": 830,
+      "cols_before": 8,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 9,
+        "timestamp": "2026-09-30T20:17:34+00:00",
+        "analysis": "La table orders semble être une table de faits au grain commande (une ligne par orderID), avec orderID comme clé primaire et des clés étrangères vers client, employé et transporteur. Les colonnes sont toutes en texte alors que plusieurs sont naturellement numériques ou dates, et il y a quelques valeurs manquantes sur shippedDate. Le risque principal est de casser les jointures si les clés sont converties différemment que dans les tables de dimensions.",
+        "table_role": "fait",
+        "recommendations": [
+          "Valider manuellement la décision de garder orderID en texte ou le convertir en nombre pour assurer la cohérence avec les tables de dimensions.",
+          "Imputer ou traiter les 21 valeurs manquantes de shippedDate après validation métier.",
+          "Vérifier que les conversions numériques d'employeeID et shipperID correspondent aux types utilisés dans les tables de dimensions associées."
+        ],
+        "verdicts": {
+          "1": {
+            "accept": false,
+            "reason": "Convertir orderID en nombre pourrait rompre les jointures si les autres tables conservent cet identifiant en texte."
+          },
+          "2": {
+            "accept": true,
+            "reason": "employeeID est purement numérique et aucune perte d'information n'est attendue."
+          },
+          "3": {
+            "accept": true,
+            "reason": "shipperID ne comporte que des chiffres, la conversion en nombre est sûre."
+          },
+          "4": {
+            "accept": true,
+            "reason": "freight représente des montants décimaux, la conversion en type numérique est appropriée."
+          },
+          "5": {
+            "accept": true,
+            "reason": "orderDate est déjà au format ISO, la conversion en type date ne change rien au sens."
+          },
+          "6": {
+            "accept": true,
+            "reason": "requiredDate est également au format ISO, conversion en date recommandée."
+          },
+          "7": {
+            "accept": true,
+            "reason": "shippedDate contient des dates valides et des nulls, la conversion en date conserve les manquants."
+          },
+          "8": {
+            "accept": true,
+            "reason": "Le flag outliers sur freight ne modifie pas les données et aide à repérer des valeurs anormales."
+          },
+          "9": {
+            "accept": true,
+            "reason": "Le flag missing sur shippedDate signale les 21 valeurs nulles sans les altérer."
+          }
+        }
+      },
+      "rows_after": 830,
+      "cols_after": 8
+    },
+    "products": {
+      "source": "products.csv",
+      "rows_before": 77,
+      "cols_before": 6,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 6,
+        "timestamp": "2026-09-30T20:17:37+00:00",
+        "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7465, Requested 2345. Please try again in 13.575s. Need more tokens? Upgrade to Dev Tier today at https://con"
+      },
+      "rows_after": 77,
+      "cols_after": 6
+    },
+    "shippers": {
+      "source": "shippers.csv",
+      "rows_before": 3,
+      "cols_before": 2,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 1,
+        "timestamp": "2026-09-30T20:17:38+00:00",
+        "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7380, Requested 1792. Please try again in 8.79s. Need more tokens? Upgrade to Dev Tier today at https://conso"
+      },
+      "rows_after": 3,
+      "cols_after": 2
+    }
+  },
+  "planner": {
+    "mode": "llm",
+    "model": "openai/gpt-oss-120b",
+    "warning": null
+  },
+  "steps_applied": 21,
+  "steps_rejected": 1,
+  "issues_flagged": 6,
+  "status": "WARN",
+  "needs_human_validation": [
+    "employees.reportsTo : 1 valeur(s) manquante(s) (11 %) : laissées vides, imputation soumise à validation humaine | LLM : flag_missing est un outil de signalement qui ne modifie pas les données et aide à repérer les managers manquants.",
+    "order_details.unitPrice : 60 valeur(s) extrême(s) hors [-48.00 ; 92.00] (écart interquartile x3) : signalées, non modifiées | LLM : Flag d'outliers conservé, aucune modification des données.",
+    "order_details.quantity : 24 valeur(s) extrême(s) hors [-50.00 ; 90.00] (écart interquartile x3) : signalées, non modifiées | LLM : Flag d'outliers conservé, aucune modification des données.",
+    "orders.freight : 34 valeur(s) extrême(s) hors [-220.77 ; 325.58] (écart interquartile x3) : signalées, non modifiées | LLM : Le flag outliers sur freight ne modifie pas les données et aide à repérer des valeurs anormales.",
+    "orders.shippedDate : 21 valeur(s) manquante(s) (3 %) : laissées vides, imputation soumise à validation humaine | LLM : Le flag missing sur shippedDate signale les 21 valeurs nulles sans les altérer.",
+    "products.unitPrice : 3 valeur(s) extrême(s) hors [-46.75 ; 93.25] (écart interquartile x3) : signalées, non modifiées"
+  ],
+  "steps": [
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 1,
+      "timestamp": "2026-09-30T20:17:23+00:00",
+      "table": "categories",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "categoryID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : Conversion en nombre de categoryID est sûre, les valeurs sont déjà numériques et ne comportent pas de zéros initiaux, ce qui facilite les jointures",
+      "params": {},
+      "rows_before": 8,
+      "rows_after": 8,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 2,
+      "timestamp": "2026-09-30T20:17:25+00:00",
+      "table": "customers",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces superflus",
+      "kind": "fix",
+      "column": "companyName",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces superflus | LLM : Le trim des espaces superflus sur companyName ne supprime aucune donnée métier et améliore la cohérence des libellés.",
+      "params": {},
+      "rows_before": 91,
+      "rows_after": 91,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 91,
+          "avant": "Wolski  Zajazd",
+          "apres": "Wolski Zajazd"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 3,
+      "timestamp": "2026-09-30T20:17:27+00:00",
+      "table": "employees",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "employeeID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : employeeID ne comporte pas de zéros initiaux et est uniquement numérique, la conversion en nombre ne perd aucune information métier.",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 4,
+      "timestamp": "2026-09-30T20:17:27+00:00",
+      "table": "employees",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "reportsTo",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : reportsTo est également numérique et la conversion garde la valeur null, aucune perte d'information.",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 5,
+      "timestamp": "2026-09-30T20:17:27+00:00",
+      "table": "employees",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "reportsTo",
+      "status": "flagged",
+      "reason": "1 valeur(s) manquante(s) (11 %) : laissées vides, imputation soumise à validation humaine | LLM : flag_missing est un outil de signalement qui ne modifie pas les données et aide à repérer les managers manquants.",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 6,
+      "timestamp": "2026-09-30T20:17:29+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : Conversion sûre en nombre, aucun zéro initial détecté.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 7,
+      "timestamp": "2026-09-30T20:17:29+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : Conversion sûre en nombre, les IDs sont purement numériques.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 8,
+      "timestamp": "2026-09-30T20:17:29+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : unitPrice doit être numérique pour les calculs de prix.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 9,
+      "timestamp": "2026-09-30T20:17:30+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "quantity",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : quantity doit être numérique pour les agrégations.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 10,
+      "timestamp": "2026-09-30T20:17:30+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "discount",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : discount est un taux numérique, conversion appropriée.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 11,
+      "timestamp": "2026-09-30T20:17:30+00:00",
+      "table": "order_details",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "unitPrice",
+      "status": "flagged",
+      "reason": "60 valeur(s) extrême(s) hors [-48.00 ; 92.00] (écart interquartile x3) : signalées, non modifiées | LLM : Flag d'outliers conservé, aucune modification des données.",
+      "params": {
+        "low": -48.0,
+        "high": 92.0
+      },
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 12,
+      "timestamp": "2026-09-30T20:17:30+00:00",
+      "table": "order_details",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "quantity",
+      "status": "flagged",
+      "reason": "24 valeur(s) extrême(s) hors [-50.00 ; 90.00] (écart interquartile x3) : signalées, non modifiées | LLM : Flag d'outliers conservé, aucune modification des données.",
+      "params": {
+        "low": -50.0,
+        "high": 90.0
+      },
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 13,
+      "timestamp": "2026-09-30T20:17:34+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "rejected",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : Convertir orderID en nombre pourrait rompre les jointures si les autres tables conservent cet identifiant en texte.",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 14,
+      "timestamp": "2026-09-30T20:17:35+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "employeeID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : employeeID est purement numérique et aucune perte d'information n'est attendue.",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 15,
+      "timestamp": "2026-09-30T20:17:35+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "shipperID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : shipperID ne comporte que des chiffres, la conversion en nombre est sûre.",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 16,
+      "timestamp": "2026-09-30T20:17:35+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "freight",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : freight représente des montants décimaux, la conversion en type numérique est appropriée.",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 17,
+      "timestamp": "2026-09-30T20:17:35+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "orderDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ | LLM : orderDate est déjà au format ISO, la conversion en type date ne change rien au sens.",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 18,
+      "timestamp": "2026-09-30T20:17:36+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "requiredDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ | LLM : requiredDate est également au format ISO, conversion en date recommandée.",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 19,
+      "timestamp": "2026-09-30T20:17:36+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "shippedDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ | LLM : shippedDate contient des dates valides et des nulls, la conversion en date conserve les manquants.",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 20,
+      "timestamp": "2026-09-30T20:17:36+00:00",
+      "table": "orders",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "freight",
+      "status": "flagged",
+      "reason": "34 valeur(s) extrême(s) hors [-220.77 ; 325.58] (écart interquartile x3) : signalées, non modifiées | LLM : Le flag outliers sur freight ne modifie pas les données et aide à repérer des valeurs anormales.",
+      "params": {
+        "low": -220.77,
+        "high": 325.58
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 21,
+      "timestamp": "2026-09-30T20:17:36+00:00",
+      "table": "orders",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "shippedDate",
+      "status": "flagged",
+      "reason": "21 valeur(s) manquante(s) (3 %) : laissées vides, imputation soumise à validation humaine | LLM : Le flag missing sur shippedDate signale les 21 valeurs nulles sans les altérer.",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 22,
+      "timestamp": "2026-09-30T20:17:37+00:00",
+      "table": "products",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces superflus",
+      "kind": "fix",
+      "column": "quantityPerUnit",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces superflus",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 36,
+          "avant": "24 - 250 g  jars",
+          "apres": "24 - 250 g jars"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 23,
+      "timestamp": "2026-09-30T20:17:37+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 24,
+      "timestamp": "2026-09-30T20:17:37+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 25,
+      "timestamp": "2026-09-30T20:17:37+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "discontinued",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 26,
+      "timestamp": "2026-09-30T20:17:37+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "categoryID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 27,
+      "timestamp": "2026-09-30T20:17:37+00:00",
+      "table": "products",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "unitPrice",
+      "status": "flagged",
+      "reason": "3 valeur(s) extrême(s) hors [-46.75 ; 93.25] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -46.75,
+        "high": 93.25
+      },
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T201720749630Z",
+      "step": 28,
+      "timestamp": "2026-09-30T20:17:38+00:00",
+      "table": "shippers",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "shipperID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 3,
+      "rows_after": 3,
+      "values_changed": 0,
+      "examples": []
+    }
+  ]
+}

@@ -1,0 +1,813 @@
+{
+  "run_id": "clean_20261001T100846287596Z",
+  "finished_at": "2026-10-01T10:10:33+00:00",
+  "inputs": [
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\2ff9a1fe00c0\\uploads\\categories.csv",
+      "sha256": "247a58c07dab5c39622ad4bf6fdacf3c8c688da5e418922d6049f29e8072a48b",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "categories"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\2ff9a1fe00c0\\uploads\\customers.csv",
+      "sha256": "1108622425a4224d622576de7541b9cd5990239fb7a0934b19a5c806f4cb5367",
+      "encoding": "cp1252",
+      "delimiter": ",",
+      "tables": [
+        "customers"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\2ff9a1fe00c0\\uploads\\employees.csv",
+      "sha256": "5ff38be204c857b820fc7ab213f8e7a884673f7ba6b0abfa62bbb237165e342b",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "employees"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\2ff9a1fe00c0\\uploads\\order_details.csv",
+      "sha256": "c3ff191cf94ae777ed07e8633f1afd82328e1942a876a9d0df4648b3bbd35ce8",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "order_details"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\2ff9a1fe00c0\\uploads\\orders.csv",
+      "sha256": "9f6138249c696169c48a75c3af1f4329031873e2cca269336078fe079772ccf6",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "orders"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\2ff9a1fe00c0\\uploads\\products.csv",
+      "sha256": "004a8ac1cecbf5e1f1d3a504ff9fea20a422daeffd466bab990c9af6e449c1f4",
+      "encoding": "cp1252",
+      "delimiter": ",",
+      "tables": [
+        "products"
+      ]
+    },
+    {
+      "file": "C:\\Users\\ammar\\Downloads\\bi_flow_projet (1)\\bi_flow\\web\\workspace\\2ff9a1fe00c0\\uploads\\shippers.csv",
+      "sha256": "5776d698415453e46960334d4e79abf2d68e152fb02c661837fbc8103704d7b3",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "shippers"
+      ]
+    }
+  ],
+  "tables": {
+    "categories": {
+      "source": "categories.csv",
+      "rows_before": 8,
+      "cols_before": 3,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 1,
+        "timestamp": "2026-10-01T10:08:53+00:00",
+        "analysis": "Table petite de 8 lignes décrivant des catégories produit, grain au niveau catégorie, clé primaire probable categoryID, aucune valeur manquante, pas de doublons, colonnes déjà propres.",
+        "table_role": "dimension",
+        "recommendations": [
+          "Appliquer clean_column_names sur toutes les colonnes",
+          "trim_whitespace sur categoryName et description",
+          "flag_duplicate_keys pour vérifier l'unicité future",
+          "drop_empty_rows/columns (aucune ligne/colonne vide)",
+          "imputer_missing non nécessaire ici"
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "categoryID ne comporte que des chiffres sans zéros initiaux, le convertir en entier ne perd aucune information métier et facilite les jointures."
+          }
+        }
+      },
+      "rows_after": 8,
+      "cols_after": 3
+    },
+    "customers": {
+      "source": "customers.csv",
+      "rows_before": 91,
+      "cols_before": 6,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 1,
+        "timestamp": "2026-10-01T10:08:57+00:00",
+        "analysis": "Table customers contient 91 lignes, chaque ligne représente un client unique (grain client). La clé primaire est customerID (distinct, sans null). Les colonnes sont bien typées en texte, sans valeurs manquantes, mais un léger problème d'espaces dans companyName. La qualité globale est bonne, risque de doublons ou d'incohérences de noms de pays faible.",
+        "table_role": "dimension",
+        "recommendations": [
+          "Appliquer clean_column_names pour uniformiser les noms de colonnes",
+          "Normaliser les valeurs de country avec normalize_country",
+          "Vérifier les doublons de clés avec flag_duplicate_keys puis drop_duplicates si nécessaire",
+          "Uniformiser les variantes de city ou country avec merge_category_variants si besoin"
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "Supprimer les espaces superflus ne modifie pas le contenu métier et corrige le seul cas détecté."
+          }
+        }
+      },
+      "rows_after": 91,
+      "cols_after": 6
+    },
+    "employees": {
+      "source": "employees.csv",
+      "rows_before": 9,
+      "cols_before": 6,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 3,
+        "timestamp": "2026-10-01T10:09:01+00:00",
+        "analysis": "Table employees (9 lignes) ressemble à une dimension employé avec un identifiant, un nom, un titre, ville, pays et le manager (reportsTo). Les colonnes sont déjà propres, peu de valeurs manquantes (reportsTo) et aucune donnée numérique stockée en texte. Risque principal : perte d'information si les IDs contiennent des zéros initiaux, ce qui n'est pas le cas ici.",
+        "table_role": "dimension",
+        "recommendations": [
+          "Appliquer clean_column_names pour uniformiser les noms (ex. employee_id, reports_to).",
+          "Standardiser les pays avec normalize_country (USA→US, UK→GB).",
+          "Vérifier l'unicité de employeeID et supprimer d'éventuels doublons avec drop_duplicates.",
+          "Imputer ou laisser null les valeurs manquantes de reportsTo selon la logique métier."
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "employeeID ne comporte pas de zéros initiaux, le convertir en nombre facilite les jointures sans perdre d'information métier."
+          },
+          "2": {
+            "accept": true,
+            "reason": "reportsTo est une clé étrangère numérique stockée en texte ; la conversion en nombre conserve la relation hiérarchique."
+          },
+          "3": {
+            "accept": true,
+            "reason": "flag_missing ne modifie pas les données et permet de repérer le manager manquant (ex. CEO)."
+          }
+        }
+      },
+      "rows_after": 9,
+      "cols_after": 6
+    },
+    "order_details": {
+      "source": "order_details.csv",
+      "rows_before": 2155,
+      "cols_before": 5,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 5,
+        "timestamp": "2026-10-01T10:09:03+00:00",
+        "analysis": "La table order_details est un fait détaillant chaque ligne de commande (grain: ligne de commande). Les colonnes orderID et productID sont des clés de jointure vers les dimensions Orders et Products. Toutes les colonnes sont de type texte mais contiennent uniquement des valeurs numériques, sans valeurs manquantes ni zéros initiaux. Le risque principal est de perdre le sens métier si l’on convertit des identifiants en texte, mais ici les IDs sont purement numériques, donc la conversion est sûre.",
+        "table_role": "fait",
+        "recommendations": [
+          "Appliquer cast_numeric aux colonnes indiquées puis définir les types dans le modèle Power BI (int pour les IDs, decimal pour unitPrice, int pour quantity, decimal pour discount).",
+          "Créer une clé primaire composite (orderID,productID) et vérifier l’unicité avec flag_duplicate_keys.",
+          "Envisager round_money sur unitPrice si des décimales supplémentaires apparaissent."
+        ],
+        "verdicts": {
+          "1": {
+            "accept": true,
+            "reason": "orderID ne comporte aucun zéro initial ni caractère spécial, le convertir en nombre facilite les jointures."
+          },
+          "2": {
+            "accept": true,
+            "reason": "productID est un identifiant numérique pur, la conversion en nombre ne détruit aucune information."
+          },
+          "3": {
+            "accept": true,
+            "reason": "unitPrice doit être numérique pour les calculs de montant, la conversion est appropriée."
+          },
+          "4": {
+            "accept": true,
+            "reason": "quantity représente un nombre d'unités, il faut le convertir en type numérique."
+          },
+          "5": {
+            "accept": true,
+            "reason": "discount est déjà exprimé entre 0 et 1, le convertir en nombre permet les agrégations."
+          }
+        }
+      },
+      "rows_after": 2155,
+      "cols_after": 5
+    },
+    "orders": {
+      "source": "orders.csv",
+      "rows_before": 830,
+      "cols_before": 8,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 9,
+        "timestamp": "2026-10-01T10:09:07+00:00",
+        "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7316, Requested 3092. Please try again in 18.06s. Need more tokens? Upgrade to Dev Tier today at https://cons"
+      },
+      "rows_after": 830,
+      "cols_after": 8
+    },
+    "products": {
+      "source": "products.csv",
+      "rows_before": 77,
+      "cols_before": 6,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 7,
+        "timestamp": "2026-10-01T10:09:09+00:00",
+        "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7046, Requested 2816. Please try again in 13.965s. Need more tokens? Upgrade to Dev Tier today at https://con"
+      },
+      "rows_after": 77,
+      "cols_after": 12
+    },
+    "shippers": {
+      "source": "shippers.csv",
+      "rows_before": 3,
+      "cols_before": 2,
+      "llm": {
+        "model": "openai/gpt-oss-120b",
+        "candidates": 1,
+        "timestamp": "2026-10-01T10:09:12+00:00",
+        "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6660, Requested 2140. Please try again in 6s. Need more tokens? Upgrade to Dev Tier today at https://console."
+      },
+      "rows_after": 3,
+      "cols_after": 2
+    }
+  },
+  "planner": {
+    "mode": "llm",
+    "model": "openai/gpt-oss-120b",
+    "warning": null
+  },
+  "steps_applied": 24,
+  "steps_rejected": 0,
+  "issues_flagged": 2,
+  "status": "WARN",
+  "needs_human_validation": [
+    "employees.reportsTo : 1 valeur(s) manquante(s) (11 %) : laissées vides | LLM : flag_missing ne modifie pas les données et permet de repérer le manager manquant (ex. CEO).",
+    "orders.shippedDate : 21 valeur(s) manquante(s) (3 %) : laissées vides"
+  ],
+  "steps": [
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 1,
+      "timestamp": "2026-10-01T10:08:53+00:00",
+      "table": "categories",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "categoryID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : categoryID ne comporte que des chiffres sans zéros initiaux, le convertir en entier ne perd aucune information métier et facilite les jointures.",
+      "params": {},
+      "rows_before": 8,
+      "rows_after": 8,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 2,
+      "timestamp": "2026-10-01T10:08:57+00:00",
+      "table": "customers",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces et caractères invisibles",
+      "kind": "fix",
+      "column": "companyName",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces en trop, retours à la ligne ou caractères invisibles | LLM : Supprimer les espaces superflus ne modifie pas le contenu métier et corrige le seul cas détecté.",
+      "params": {},
+      "rows_before": 91,
+      "rows_after": 91,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 91,
+          "avant": "Wolski  Zajazd",
+          "apres": "Wolski Zajazd"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 3,
+      "timestamp": "2026-10-01T10:09:01+00:00",
+      "table": "employees",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "employeeID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : employeeID ne comporte pas de zéros initiaux, le convertir en nombre facilite les jointures sans perdre d'information métier.",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 4,
+      "timestamp": "2026-10-01T10:09:01+00:00",
+      "table": "employees",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "reportsTo",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : reportsTo est une clé étrangère numérique stockée en texte ; la conversion en nombre conserve la relation hiérarchique.",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 5,
+      "timestamp": "2026-10-01T10:09:01+00:00",
+      "table": "employees",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "reportsTo",
+      "status": "flagged",
+      "reason": "1 valeur(s) manquante(s) (11 %) : laissées vides | LLM : flag_missing ne modifie pas les données et permet de repérer le manager manquant (ex. CEO).",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 6,
+      "timestamp": "2026-10-01T10:09:03+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : orderID ne comporte aucun zéro initial ni caractère spécial, le convertir en nombre facilite les jointures.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 7,
+      "timestamp": "2026-10-01T10:09:03+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : productID est un identifiant numérique pur, la conversion en nombre ne détruit aucune information.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 8,
+      "timestamp": "2026-10-01T10:09:03+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : unitPrice doit être numérique pour les calculs de montant, la conversion est appropriée.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 9,
+      "timestamp": "2026-10-01T10:09:03+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "quantity",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : quantity représente un nombre d'unités, il faut le convertir en type numérique.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 10,
+      "timestamp": "2026-10-01T10:09:03+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "discount",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre | LLM : discount est déjà exprimé entre 0 et 1, le convertir en nombre permet les agrégations.",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 11,
+      "timestamp": "2026-10-01T10:09:07+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 12,
+      "timestamp": "2026-10-01T10:09:08+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "employeeID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 13,
+      "timestamp": "2026-10-01T10:09:08+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "shipperID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 14,
+      "timestamp": "2026-10-01T10:09:08+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "freight",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 15,
+      "timestamp": "2026-10-01T10:09:08+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "orderDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 16,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "requiredDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 17,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "shippedDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 18,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "orders",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "shippedDate",
+      "status": "flagged",
+      "reason": "21 valeur(s) manquante(s) (3 %) : laissées vides",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 19,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "products",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces et caractères invisibles",
+      "kind": "fix",
+      "column": "productName",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces en trop, retours à la ligne ou caractères invisibles",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 25,
+          "avant": "NuNuCa Nuß-Nougat-Creme",
+          "apres": "NuNuCa Nuß-Nougat-Creme"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 20,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "products",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces et caractères invisibles",
+      "kind": "fix",
+      "column": "quantityPerUnit",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces en trop, retours à la ligne ou caractères invisibles",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 36,
+          "avant": "24 - 250 g  jars",
+          "apres": "24 - 250 g jars"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 21,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 22,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 23,
+      "timestamp": "2026-10-01T10:09:09+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "categoryID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 24,
+      "timestamp": "2026-10-01T10:09:10+00:00",
+      "table": "products",
+      "tool": "cast_boolean",
+      "label": "Convertir en booléen",
+      "kind": "fix",
+      "column": "discontinued",
+      "status": "applied",
+      "reason": "colonne oui/non codée 0 / 1 : conversion en booléen (1 = vrai)",
+      "params": {
+        "ones": true
+      },
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 77,
+      "examples": [
+        {
+          "row": 1,
+          "avant": "0",
+          "apres": "False"
+        },
+        {
+          "row": 2,
+          "avant": "0",
+          "apres": "False"
+        },
+        {
+          "row": 3,
+          "avant": "0",
+          "apres": "False"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 25,
+      "timestamp": "2026-10-01T10:09:10+00:00",
+      "table": "products",
+      "tool": "split_packaging",
+      "label": "Décomposer les conditionnements en colonnes",
+      "kind": "fix",
+      "column": "quantityPerUnit",
+      "status": "applied",
+      "reason": "77 conditionnements décomposés sur 77 en colonnes exploitables : nb_unites, taille_unite, unite_mesure, contenant, quantite_totale, unite_base (quantité totale convertie en g ou en ml)",
+      "params": {
+        "columns": [
+          "nb_unites",
+          "taille_unite",
+          "unite_mesure",
+          "contenant",
+          "quantite_totale",
+          "unite_base"
+        ],
+        "count": 77,
+        "unparsed": []
+      },
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 77,
+      "examples": [
+        {
+          "quantityPerUnit": "10 boxes x 20 bags",
+          "nb_unites": "200",
+          "taille_unite": null,
+          "unite_mesure": null,
+          "contenant": "bag",
+          "quantite_totale": null,
+          "unite_base": null
+        },
+        {
+          "quantityPerUnit": "24 - 12 oz bottles",
+          "nb_unites": "24",
+          "taille_unite": "12.0",
+          "unite_mesure": "oz",
+          "contenant": "bottle",
+          "quantite_totale": "8517.17",
+          "unite_base": "ml"
+        },
+        {
+          "quantityPerUnit": "12 - 550 ml bottles",
+          "nb_unites": "12",
+          "taille_unite": "550.0",
+          "unite_mesure": "ml",
+          "contenant": "bottle",
+          "quantite_totale": "6600.0",
+          "unite_base": "ml"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 26,
+      "timestamp": "2026-10-01T10:09:12+00:00",
+      "table": "shippers",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "shipperID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 3,
+      "rows_after": 3,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20261001T100846287596Z",
+      "step": 27,
+      "timestamp": "2026-10-01T10:10:33+00:00",
+      "table": "orders",
+      "tool": "cap_outliers",
+      "label": "Traiter les valeurs extrêmes",
+      "kind": "fix",
+      "column": "freight",
+      "status": "kept",
+      "reason": "1 valeur extrême : 1 en dessous de 0,12 (valeur habituelle : 41,36) | conservé à la demande de l'utilisateur",
+      "params": {
+        "low": 0.12,
+        "high": 1007.64,
+        "n_low": 1,
+        "n_high": 0,
+        "median": 41.36,
+        "log_scale": true,
+        "rows": [
+          {
+            "row": 725,
+            "label": "orderID 10972 · customerID LACOR",
+            "value": 0.02,
+            "diagnosis": "2 068 fois plus petite que d'habitude : rare mais possible",
+            "error": false
+          }
+        ],
+        "recommended": "keep",
+        "examples": [
+          0.02
+        ]
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BI Flow · Nettoyage</title>
+<link rel="stylesheet" href="/static/style.css">
+<link rel="icon" href="data:,">
+</head>
+<body>
+<header class="top">
+  <div>
+    <h1>BI Flow <span class="muted">· Nettoyage des données</span></h1>
+    <p class="muted">Déposez vos fichiers CSV ou Excel. Le LLM analyse chaque table, l'agent la nettoie, puis vous voyez ce qui a changé.</p>
+  </div>
+  <span id="llm-badge" class="badge">…</span>
+</header>
+
+<main class="layout">
+  <aside class="panel">
+    <h2>1. Vos fichiers</h2>
+    <label id="dropzone" class="dropzone" for="file-input">
+      <input id="file-input" type="file" multiple accept=".csv,.xlsx,.xlsm" hidden>
+      <strong>Glissez vos fichiers ici</strong>
+      <span class="muted">ou cliquez pour choisir · <span id="allowed">.csv, .xlsx, .xlsm</span></span>
+    </label>
+    <p id="file-error" class="error" hidden></p>
+    <ul id="file-list" class="file-list"></ul>
+
+    <h2>2. Options</h2>
+    <div class="segmented" role="radiogroup" aria-label="Analyse">
+      <label><input type="radio" name="planner" value="llm" checked><span>Avec le LLM</span></label>
+      <label><input type="radio" name="planner" value="rules"><span>Sans LLM</span></label>
+    </div>
+    <div id="llm-options">
+      <label class="field">Modèle
+        <select id="model"></select>
+      </label>
+      <label class="field" id="key-field" hidden>Clé Groq (utilisée pour ce run, non enregistrée)
+        <input id="groq-key" type="password" placeholder="gsk_…" autocomplete="off">
+      </label>
+    </div>
+    <label class="check"><input type="checkbox" id="impute"> Compléter les cases vides (médiane ou valeur la plus fréquente)</label>
+
+    <button id="run-btn" class="primary" disabled>Nettoyer</button>
+
+    <h2>Derniers nettoyages</h2>
+    <ul id="history" class="history"></ul>
+  </aside>
+
+  <section class="panel results" id="results" aria-live="polite">
+    <div class="empty muted">Déposez des fichiers puis cliquez sur « Nettoyer ».</div>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

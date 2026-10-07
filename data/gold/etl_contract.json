@@ -1,0 +1,535 @@
+{
+  "agent": "etl",
+  "version": "1.0",
+  "run_id": "etl_20260930T194238Z",
+  "generated_at": "2026-09-30T19:42:38+00:00",
+  "quality_status": "OK",
+  "unknown_member_key": -1,
+  "tables": [
+    {
+      "name": "dim_date",
+      "role": "dimension",
+      "path": "data/gold/dim_date.csv",
+      "rows": 1096,
+      "columns": [
+        {
+          "name": "date_key",
+          "type": "int64"
+        },
+        {
+          "name": "date",
+          "type": "date"
+        },
+        {
+          "name": "year",
+          "type": "int64"
+        },
+        {
+          "name": "quarter",
+          "type": "string"
+        },
+        {
+          "name": "month_number",
+          "type": "int64"
+        },
+        {
+          "name": "month_name",
+          "type": "string"
+        },
+        {
+          "name": "year_month",
+          "type": "string"
+        },
+        {
+          "name": "week_iso",
+          "type": "int64"
+        },
+        {
+          "name": "day_of_week",
+          "type": "int64"
+        },
+        {
+          "name": "is_weekend",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "dim_customer",
+      "role": "dimension",
+      "path": "data/gold/dim_customer.csv",
+      "rows": 92,
+      "columns": [
+        {
+          "name": "customer_key",
+          "type": "int64"
+        },
+        {
+          "name": "customer_id",
+          "type": "string"
+        },
+        {
+          "name": "company_name",
+          "type": "string"
+        },
+        {
+          "name": "contact_name",
+          "type": "string"
+        },
+        {
+          "name": "contact_title",
+          "type": "string"
+        },
+        {
+          "name": "city",
+          "type": "string"
+        },
+        {
+          "name": "country",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "dim_product",
+      "role": "dimension",
+      "path": "data/gold/dim_product.csv",
+      "rows": 78,
+      "columns": [
+        {
+          "name": "product_key",
+          "type": "int64"
+        },
+        {
+          "name": "product_id",
+          "type": "int64"
+        },
+        {
+          "name": "product_name",
+          "type": "string"
+        },
+        {
+          "name": "quantity_per_unit",
+          "type": "string"
+        },
+        {
+          "name": "list_unit_price",
+          "type": "decimal"
+        },
+        {
+          "name": "discontinued",
+          "type": "boolean"
+        },
+        {
+          "name": "category_id",
+          "type": "int64"
+        },
+        {
+          "name": "category_name",
+          "type": "string"
+        },
+        {
+          "name": "category_description",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "dim_employee",
+      "role": "dimension",
+      "path": "data/gold/dim_employee.csv",
+      "rows": 10,
+      "columns": [
+        {
+          "name": "employee_key",
+          "type": "int64"
+        },
+        {
+          "name": "employee_id",
+          "type": "int64"
+        },
+        {
+          "name": "employee_name",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "city",
+          "type": "string"
+        },
+        {
+          "name": "country",
+          "type": "string"
+        },
+        {
+          "name": "manager_id",
+          "type": "string"
+        },
+        {
+          "name": "manager_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "dim_shipper",
+      "role": "dimension",
+      "path": "data/gold/dim_shipper.csv",
+      "rows": 4,
+      "columns": [
+        {
+          "name": "shipper_key",
+          "type": "int64"
+        },
+        {
+          "name": "shipper_id",
+          "type": "int64"
+        },
+        {
+          "name": "shipper_name",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "fact_sales",
+      "role": "fact",
+      "path": "data/gold/fact_sales.csv",
+      "rows": 2155,
+      "columns": [
+        {
+          "name": "sales_line_key",
+          "type": "int64"
+        },
+        {
+          "name": "order_id",
+          "type": "int64"
+        },
+        {
+          "name": "product_id",
+          "type": "int64"
+        },
+        {
+          "name": "order_date_key",
+          "type": "int64"
+        },
+        {
+          "name": "customer_key",
+          "type": "int64"
+        },
+        {
+          "name": "product_key",
+          "type": "int64"
+        },
+        {
+          "name": "employee_key",
+          "type": "int64"
+        },
+        {
+          "name": "shipper_key",
+          "type": "int64"
+        },
+        {
+          "name": "unit_price",
+          "type": "decimal"
+        },
+        {
+          "name": "quantity",
+          "type": "int64"
+        },
+        {
+          "name": "discount",
+          "type": "decimal"
+        },
+        {
+          "name": "gross_amount",
+          "type": "decimal"
+        },
+        {
+          "name": "discount_amount",
+          "type": "decimal"
+        },
+        {
+          "name": "net_amount",
+          "type": "decimal"
+        },
+        {
+          "name": "freight_allocated",
+          "type": "decimal"
+        }
+      ]
+    },
+    {
+      "name": "fact_orders",
+      "role": "fact",
+      "path": "data/gold/fact_orders.csv",
+      "rows": 830,
+      "columns": [
+        {
+          "name": "order_id",
+          "type": "int64"
+        },
+        {
+          "name": "order_date_key",
+          "type": "int64"
+        },
+        {
+          "name": "required_date_key",
+          "type": "int64"
+        },
+        {
+          "name": "shipped_date_key",
+          "type": "int64"
+        },
+        {
+          "name": "customer_key",
+          "type": "int64"
+        },
+        {
+          "name": "employee_key",
+          "type": "int64"
+        },
+        {
+          "name": "shipper_key",
+          "type": "int64"
+        },
+        {
+          "name": "freight",
+          "type": "decimal"
+        },
+        {
+          "name": "line_count",
+          "type": "int64"
+        },
+        {
+          "name": "total_quantity",
+          "type": "int64"
+        },
+        {
+          "name": "order_net_amount",
+          "type": "decimal"
+        },
+        {
+          "name": "is_shipped",
+          "type": "boolean"
+        },
+        {
+          "name": "days_to_ship",
+          "type": "int64"
+        },
+        {
+          "name": "delay_days",
+          "type": "int64"
+        },
+        {
+          "name": "is_late",
+          "type": "boolean"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from": "dim_date.date_key",
+      "to": "fact_sales.order_date_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_customer.customer_key",
+      "to": "fact_sales.customer_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_product.product_key",
+      "to": "fact_sales.product_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_employee.employee_key",
+      "to": "fact_sales.employee_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_shipper.shipper_key",
+      "to": "fact_sales.shipper_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_date.date_key",
+      "to": "fact_orders.order_date_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_date.date_key",
+      "to": "fact_orders.required_date_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": false
+    },
+    {
+      "from": "dim_date.date_key",
+      "to": "fact_orders.shipped_date_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": false
+    },
+    {
+      "from": "dim_customer.customer_key",
+      "to": "fact_orders.customer_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_employee.employee_key",
+      "to": "fact_orders.employee_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    },
+    {
+      "from": "dim_shipper.shipper_key",
+      "to": "fact_orders.shipper_key",
+      "cardinality": "1:*",
+      "cross_filter": "single",
+      "active": true
+    }
+  ],
+  "checks": [
+    {
+      "check": "pk_unique:dim_customer.customer_key",
+      "status": "OK",
+      "detail": "0 doublon(s)"
+    },
+    {
+      "check": "pk_unique:dim_product.product_key",
+      "status": "OK",
+      "detail": "0 doublon(s)"
+    },
+    {
+      "check": "pk_unique:dim_employee.employee_key",
+      "status": "OK",
+      "detail": "0 doublon(s)"
+    },
+    {
+      "check": "pk_unique:dim_shipper.shipper_key",
+      "status": "OK",
+      "detail": "0 doublon(s)"
+    },
+    {
+      "check": "pk_unique:dim_date.date_key",
+      "status": "OK",
+      "detail": "0 doublon(s)"
+    },
+    {
+      "check": "pk_unique:fact_sales.sales_line_key",
+      "status": "OK",
+      "detail": "0 doublon(s)"
+    },
+    {
+      "check": "pk_unique:fact_orders.order_id",
+      "status": "OK",
+      "detail": "0 doublon(s)"
+    },
+    {
+      "check": "rows:fact_sales = order_details",
+      "status": "OK",
+      "detail": "2155 vs 2155"
+    },
+    {
+      "check": "rows:fact_orders = orders",
+      "status": "OK",
+      "detail": "830 vs 830"
+    },
+    {
+      "check": "fk_resolved:fact_sales.customer_key",
+      "status": "OK",
+      "detail": "0 ligne(s) rattachée(s) au membre Inconnu"
+    },
+    {
+      "check": "fk_resolved:fact_sales.product_key",
+      "status": "OK",
+      "detail": "0 ligne(s) rattachée(s) au membre Inconnu"
+    },
+    {
+      "check": "fk_resolved:fact_sales.employee_key",
+      "status": "OK",
+      "detail": "0 ligne(s) rattachée(s) au membre Inconnu"
+    },
+    {
+      "check": "fk_resolved:fact_sales.shipper_key",
+      "status": "OK",
+      "detail": "0 ligne(s) rattachée(s) au membre Inconnu"
+    },
+    {
+      "check": "fk_resolved:fact_orders.customer_key",
+      "status": "OK",
+      "detail": "0 ligne(s) rattachée(s) au membre Inconnu"
+    },
+    {
+      "check": "fk_resolved:fact_orders.employee_key",
+      "status": "OK",
+      "detail": "0 ligne(s) rattachée(s) au membre Inconnu"
+    },
+    {
+      "check": "fk_resolved:fact_orders.shipper_key",
+      "status": "OK",
+      "detail": "0 ligne(s) rattachée(s) au membre Inconnu"
+    },
+    {
+      "check": "fk_date:fact_sales.order_date_key",
+      "status": "OK",
+      "detail": "0 date(s) hors dim_date"
+    },
+    {
+      "check": "fk_date:fact_orders.order_date_key",
+      "status": "OK",
+      "detail": "0 date(s) hors dim_date"
+    },
+    {
+      "check": "fk_date:fact_orders.required_date_key",
+      "status": "OK",
+      "detail": "0 date(s) hors dim_date"
+    },
+    {
+      "check": "fk_date:fact_orders.shipped_date_key",
+      "status": "OK",
+      "detail": "0 date(s) hors dim_date ; 21 commande(s) non expédiée(s) -> -1"
+    },
+    {
+      "check": "reconcile:net_amount",
+      "status": "OK",
+      "detail": "gold 1265793.02 vs source 1265793.04"
+    },
+    {
+      "check": "reconcile:freight",
+      "status": "OK",
+      "detail": "alloué 64942.69 vs source 64942.69"
+    },
+    {
+      "check": "range:discount in [0,1]",
+      "status": "OK",
+      "detail": "0 remise(s) hors [0,1]"
+    },
+    {
+      "check": "range:quantity > 0",
+      "status": "OK",
+      "detail": "0 quantité(s) <= 0"
+    }
+  ]
+}

@@ -1,0 +1,799 @@
+{
+ "run_id": "clean_20260930T222722898194Z",
+ "finished_at": "2026-09-30T22:28:08+00:00",
+ "planner": {
+  "mode": "llm",
+  "model": "openai/gpt-oss-120b",
+  "warning": null
+ },
+ "files": [
+  "categories.csv",
+  "customers.csv",
+  "employees.csv",
+  "order_details.csv",
+  "orders.csv",
+  "products.csv",
+  "shippers.csv"
+ ],
+ "totals": {
+  "tables": 7,
+  "tables_to_process": 3,
+  "corrections": 158,
+  "rows_removed": 0,
+  "values_changed": 81,
+  "columns_added": 6,
+  "etl_ready": 7
+ },
+ "tables": [
+  {
+   "name": "customers",
+   "source": "customers.csv",
+   "rows_before": 91,
+   "rows_after": 91,
+   "cols_before": 6,
+   "cols_after": 6,
+   "changed_cells": 1,
+   "changed_rows": 1,
+   "removed_count": 0,
+   "removed_columns": [],
+   "added_columns": [],
+   "renamed": [],
+   "needs_work": true,
+   "etl_ready": true,
+   "actions": [
+    {
+     "tool": "trim_whitespace",
+     "count": 1,
+     "columns": [
+      "companyName"
+     ],
+     "text": "1 texte avec des espaces en trop ou invisibles nettoyé"
+    }
+   ],
+   "llm_refused": [],
+   "outliers": [],
+   "checks": [
+    {
+     "label": "Noms de colonnes utilisables",
+     "ok": true,
+     "detail": "sans espaces ni caractères spéciaux"
+    },
+    {
+     "label": "Chaque colonne a le bon type",
+     "ok": true,
+     "detail": "6 textes",
+     "types": {
+      "texte": [
+       "customerID",
+       "companyName",
+       "contactName",
+       "contactTitle",
+       "city",
+       "country"
+      ]
+     }
+    },
+    {
+     "label": "Clé unique",
+     "ok": true,
+     "detail": "customerID identifie chaque ligne"
+    },
+    {
+     "label": "Aucune ligne en double",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "derived": [],
+   "llm": {
+    "model": "openai/gpt-oss-120b",
+    "analysis": "Table customers, grain probable = un client par ligne avec customerID comme clé primaire, toutes les colonnes sont des chaînes sans valeurs nulles, bonne distinctivité, aucune donnée numérique à convertir, risque faible de perte d'information.",
+    "role": "dimension",
+    "error": null
+   },
+   "grid": {
+    "columns": [
+     "customerID",
+     "companyName"
+    ],
+    "changed_columns": [
+     "companyName"
+    ],
+    "rows": [
+     {
+      "row": 91,
+      "cells": [
+       {
+        "before": "WOLZA",
+        "after": "WOLZA",
+        "changed": false
+       },
+       {
+        "before": "Wolski··Zajazd",
+        "after": "Wolski Zajazd",
+        "changed": true
+       }
+      ]
+     }
+    ],
+    "more": 0
+   },
+   "removed": {
+    "columns": [
+     "customerID",
+     "companyName",
+     "contactName",
+     "contactTitle",
+     "city"
+    ],
+    "rows": [],
+    "more": 0
+   }
+  },
+  {
+   "name": "orders",
+   "source": "orders.csv",
+   "rows_before": 830,
+   "rows_after": 830,
+   "cols_before": 8,
+   "cols_after": 8,
+   "changed_cells": 1,
+   "changed_rows": 1,
+   "removed_count": 0,
+   "removed_columns": [],
+   "added_columns": [],
+   "renamed": [],
+   "needs_work": true,
+   "etl_ready": true,
+   "actions": [
+    {
+     "tool": "cap_outliers",
+     "count": 1,
+     "columns": [
+      "freight"
+     ],
+     "text": "1 valeur extrême ramenée dans la plage habituelle"
+    }
+   ],
+   "llm_refused": [],
+   "outliers": [
+    {
+     "column": "freight",
+     "status": "applied",
+     "count": 1,
+     "text": "1 valeur extrême : 1 en dessous de 0,12 (valeur habituelle : 41,36)"
+    }
+   ],
+   "checks": [
+    {
+     "label": "Noms de colonnes utilisables",
+     "ok": true,
+     "detail": "sans espaces ni caractères spéciaux"
+    },
+    {
+     "label": "Chaque colonne a le bon type",
+     "ok": true,
+     "detail": "4 nombres · 3 dates · 1 texte",
+     "types": {
+      "nombre": [
+       "orderID",
+       "employeeID",
+       "shipperID",
+       "freight"
+      ],
+      "texte": [
+       "customerID"
+      ],
+      "date": [
+       "orderDate",
+       "requiredDate",
+       "shippedDate"
+      ]
+     }
+    },
+    {
+     "label": "Clé unique",
+     "ok": true,
+     "detail": "orderID identifie chaque ligne"
+    },
+    {
+     "label": "Aucune ligne en double",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "label": "Lien customerID vers customers",
+     "ok": true,
+     "detail": "toutes les valeurs existent"
+    },
+    {
+     "label": "Lien employeeID vers employees",
+     "ok": true,
+     "detail": "toutes les valeurs existent"
+    },
+    {
+     "label": "Lien shipperID vers shippers",
+     "ok": true,
+     "detail": "toutes les valeurs existent"
+    },
+    {
+     "label": "shippedDate après orderDate",
+     "ok": true,
+     "detail": "dates cohérentes"
+    }
+   ],
+   "derived": [],
+   "llm": {
+    "model": "openai/gpt-oss-120b",
+    "analysis": null,
+    "role": null,
+    "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5828, Requested 2834. Please try again in 4.965s. Need more tokens? Upgrade to Dev Tier today at https://cons"
+   },
+   "grid": {
+    "columns": [
+     "orderID",
+     "freight"
+    ],
+    "changed_columns": [
+     "freight"
+    ],
+    "rows": [
+     {
+      "row": 725,
+      "cells": [
+       {
+        "before": "10972",
+        "after": "10972",
+        "changed": false
+       },
+       {
+        "before": "0.02",
+        "after": "0.12",
+        "changed": true
+       }
+      ]
+     }
+    ],
+    "more": 0
+   },
+   "removed": {
+    "columns": [
+     "orderID",
+     "customerID",
+     "employeeID",
+     "orderDate",
+     "requiredDate"
+    ],
+    "rows": [],
+    "more": 0
+   }
+  },
+  {
+   "name": "products",
+   "source": "products.csv",
+   "rows_before": 77,
+   "rows_after": 77,
+   "cols_before": 6,
+   "cols_after": 12,
+   "changed_cells": 79,
+   "changed_rows": 77,
+   "removed_count": 0,
+   "removed_columns": [],
+   "added_columns": [
+    "nb_unites",
+    "taille_unite",
+    "unite_mesure",
+    "contenant",
+    "quantite_totale",
+    "unite_base"
+   ],
+   "renamed": [],
+   "needs_work": true,
+   "etl_ready": true,
+   "actions": [
+    {
+     "tool": "trim_whitespace",
+     "count": 2,
+     "columns": [
+      "productName",
+      "quantityPerUnit"
+     ],
+     "text": "2 textes avec des espaces en trop ou invisibles nettoyés"
+    },
+    {
+     "tool": "cast_boolean",
+     "count": 77,
+     "columns": [
+      "discontinued"
+     ],
+     "text": "77 valeurs oui / non uniformisées"
+    },
+    {
+     "tool": "split_packaging",
+     "count": 77,
+     "columns": [
+      "quantityPerUnit"
+     ],
+     "text": "77 conditionnements décomposés en colonnes exploitables"
+    }
+   ],
+   "llm_refused": [],
+   "outliers": [],
+   "checks": [
+    {
+     "label": "Noms de colonnes utilisables",
+     "ok": true,
+     "detail": "sans espaces ni caractères spéciaux"
+    },
+    {
+     "label": "Chaque colonne a le bon type",
+     "ok": true,
+     "detail": "6 nombres · 1 oui/non · 5 textes",
+     "types": {
+      "nombre": [
+       "productID",
+       "nb_unites",
+       "taille_unite",
+       "quantite_totale",
+       "unitPrice",
+       "categoryID"
+      ],
+      "texte": [
+       "productName",
+       "quantityPerUnit",
+       "unite_mesure",
+       "contenant",
+       "unite_base"
+      ],
+      "oui/non": [
+       "discontinued"
+      ]
+     }
+    },
+    {
+     "label": "Clé unique",
+     "ok": true,
+     "detail": "productID identifie chaque ligne"
+    },
+    {
+     "label": "Aucune ligne en double",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "label": "Lien categoryID vers categories",
+     "ok": true,
+     "detail": "toutes les valeurs existent"
+    }
+   ],
+   "derived": [
+    {
+     "source": "quantityPerUnit",
+     "columns": [
+      "nb_unites",
+      "taille_unite",
+      "unite_mesure",
+      "contenant",
+      "quantite_totale",
+      "unite_base"
+     ],
+     "count": 77,
+     "unparsed": [],
+     "rows": [
+      [
+       "10 boxes x 20 bags",
+       "200",
+       "(vide)",
+       "(vide)",
+       "bag",
+       "(vide)",
+       "(vide)"
+      ],
+      [
+       "24 - 12 oz bottles",
+       "24",
+       "12",
+       "oz",
+       "bottle",
+       "8517.17",
+       "ml"
+      ],
+      [
+       "12 - 550 ml bottles",
+       "12",
+       "550",
+       "ml",
+       "bottle",
+       "6600",
+       "ml"
+      ],
+      [
+       "48 - 6 oz jars",
+       "48",
+       "6",
+       "oz",
+       "jar",
+       "8164.66",
+       "g"
+      ],
+      [
+       "12 - 1 lb pkgs.",
+       "12",
+       "1",
+       "lb",
+       "package",
+       "5443.1",
+       "g"
+      ],
+      [
+       "18 - 500 g pkgs.",
+       "18",
+       "500",
+       "g",
+       "package",
+       "9000",
+       "g"
+      ],
+      [
+       "12 - 200 ml jars",
+       "12",
+       "200",
+       "ml",
+       "jar",
+       "2400",
+       "ml"
+      ],
+      [
+       "1 kg pkg.",
+       "1",
+       "1",
+       "kg",
+       "package",
+       "1000",
+       "g"
+      ]
+     ]
+    }
+   ],
+   "llm": {
+    "model": "openai/gpt-oss-120b",
+    "analysis": null,
+    "role": null,
+    "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 5522, Requested 2558. Please try again in 600ms. Need more tokens? Upgrade to Dev Tier today at https://conso"
+   },
+   "grid": {
+    "columns": [
+     "productID",
+     "productName",
+     "quantityPerUnit",
+     "discontinued"
+    ],
+    "changed_columns": [
+     "productName",
+     "quantityPerUnit",
+     "discontinued"
+    ],
+    "rows": [
+     {
+      "row": 1,
+      "cells": [
+       {
+        "before": "1",
+        "after": "1",
+        "changed": false
+       },
+       {
+        "before": "Chai",
+        "after": "Chai",
+        "changed": false
+       },
+       {
+        "before": "10 boxes x 20 bags",
+        "after": "10 boxes x 20 bags",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 2,
+      "cells": [
+       {
+        "before": "2",
+        "after": "2",
+        "changed": false
+       },
+       {
+        "before": "Chang",
+        "after": "Chang",
+        "changed": false
+       },
+       {
+        "before": "24 - 12 oz bottles",
+        "after": "24 - 12 oz bottles",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 3,
+      "cells": [
+       {
+        "before": "3",
+        "after": "3",
+        "changed": false
+       },
+       {
+        "before": "Aniseed Syrup",
+        "after": "Aniseed Syrup",
+        "changed": false
+       },
+       {
+        "before": "12 - 550 ml bottles",
+        "after": "12 - 550 ml bottles",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 4,
+      "cells": [
+       {
+        "before": "4",
+        "after": "4",
+        "changed": false
+       },
+       {
+        "before": "Chef Anton's Cajun Seasoning",
+        "after": "Chef Anton's Cajun Seasoning",
+        "changed": false
+       },
+       {
+        "before": "48 - 6 oz jars",
+        "after": "48 - 6 oz jars",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 5,
+      "cells": [
+       {
+        "before": "5",
+        "after": "5",
+        "changed": false
+       },
+       {
+        "before": "Chef Anton's Gumbo Mix",
+        "after": "Chef Anton's Gumbo Mix",
+        "changed": false
+       },
+       {
+        "before": "36 boxes",
+        "after": "36 boxes",
+        "changed": false
+       },
+       {
+        "before": "1",
+        "after": "Oui",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 6,
+      "cells": [
+       {
+        "before": "6",
+        "after": "6",
+        "changed": false
+       },
+       {
+        "before": "Grandma's Boysenberry Spread",
+        "after": "Grandma's Boysenberry Spread",
+        "changed": false
+       },
+       {
+        "before": "12 - 8 oz jars",
+        "after": "12 - 8 oz jars",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 7,
+      "cells": [
+       {
+        "before": "7",
+        "after": "7",
+        "changed": false
+       },
+       {
+        "before": "Uncle Bob's Organic Dried Pears",
+        "after": "Uncle Bob's Organic Dried Pears",
+        "changed": false
+       },
+       {
+        "before": "12 - 1 lb pkgs.",
+        "after": "12 - 1 lb pkgs.",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 8,
+      "cells": [
+       {
+        "before": "8",
+        "after": "8",
+        "changed": false
+       },
+       {
+        "before": "Northwoods Cranberry Sauce",
+        "after": "Northwoods Cranberry Sauce",
+        "changed": false
+       },
+       {
+        "before": "12 - 12 oz jars",
+        "after": "12 - 12 oz jars",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 9,
+      "cells": [
+       {
+        "before": "9",
+        "after": "9",
+        "changed": false
+       },
+       {
+        "before": "Mishi Kobe Niku",
+        "after": "Mishi Kobe Niku",
+        "changed": false
+       },
+       {
+        "before": "18 - 500 g pkgs.",
+        "after": "18 - 500 g pkgs.",
+        "changed": false
+       },
+       {
+        "before": "1",
+        "after": "Oui",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 10,
+      "cells": [
+       {
+        "before": "10",
+        "after": "10",
+        "changed": false
+       },
+       {
+        "before": "Ikura",
+        "after": "Ikura",
+        "changed": false
+       },
+       {
+        "before": "12 - 200 ml jars",
+        "after": "12 - 200 ml jars",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 11,
+      "cells": [
+       {
+        "before": "11",
+        "after": "11",
+        "changed": false
+       },
+       {
+        "before": "Queso Cabrales",
+        "after": "Queso Cabrales",
+        "changed": false
+       },
+       {
+        "before": "1 kg pkg.",
+        "after": "1 kg pkg.",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 12,
+      "cells": [
+       {
+        "before": "12",
+        "after": "12",
+        "changed": false
+       },
+       {
+        "before": "Queso Manchego La Pastora",
+        "after": "Queso Manchego La Pastora",
+        "changed": false
+       },
+       {
+        "before": "10 - 500 g pkgs.",
+        "after": "10 - 500 g pkgs.",
+        "changed": false
+       },
+       {
+        "before": "0",
+        "after": "Non",
+        "changed": true
+       }
+      ]
+     }
+    ],
+    "more": 65
+   },
+   "removed": {
+    "columns": [
+     "productID",
+     "productName",
+     "quantityPerUnit",
+     "unitPrice",
+     "discontinued"
+    ],
+    "rows": [],
+    "more": 0
+   }
+  }
+ ],
+ "clean_tables": [
+  "categories",
+  "employees",
+  "order_details",
+  "shippers"
+ ]
+}

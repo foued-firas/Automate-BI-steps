@@ -1,0 +1,115 @@
+<!doctype html><meta charset='utf-8'><title>Comparaison clean_20260930T201720749630Z</title><style>
+body{font-family:system-ui,sans-serif;margin:24px;color:#1f2328;background:#fff}
+h1{font-size:22px}h2{font-size:18px;margin-top:32px;border-bottom:1px solid #d0d7de;padding-bottom:4px}
+table{border-collapse:collapse;margin:8px 0;font-size:13px}th,td{border:1px solid #d0d7de;padding:4px 8px;text-align:left;vertical-align:top}
+th{background:#f6f8fa}.kpi{display:inline-block;margin:0 16px 8px 0;padding:8px 12px;border:1px solid #d0d7de;border-radius:6px}
+.kpi b{display:block;font-size:18px}.old{background:#ffebe9;text-decoration:line-through;white-space:pre}.new{background:#dafbe1;white-space:pre}
+.flag{color:#9a6700}.rejected{color:#cf222e}.llm{background:#f6f8fa;border-left:4px solid #8250df;padding:8px 12px;margin:8px 0}.ok{color:#1a7f37}.muted{color:#656d76}
+</style>
+<h1>Nettoyage : comparaison avant / après</h1><p class='muted'>Run clean_20260930T201720749630Z · 2026-09-30T20:17:38+00:00</p>
+<p>Planificateur : <b>llm</b> · modèle openai/gpt-oss-120b</p>
+<div class='kpi'>Tables<b>7</b></div>
+<div class='kpi'>Corrections appliquées<b>21</b></div>
+<div class='kpi'>Refusées par le LLM<b>1</b></div>
+<div class='kpi'>Valeurs modifiées<b>2</b></div>
+<div class='kpi'>Lignes supprimées<b>0</b></div>
+<div class='kpi'>Points à valider<b class='flag'>6</b></div>
+<h2>categories</h2><p>8 → 8 lignes · 3 → 3 colonnes · doublons 0 → 0 · 0 valeur(s) modifiée(s)</p>
+<div class='llm'><b>Analyse LLM</b> (openai/gpt-oss-120b, rôle : dimension)<br>Table &#x27;categories&#x27; contient 8 lignes, 3 colonnes, aucune valeur manquante, chaque ligne représente une catégorie unique ; grain probable au niveau de la catégorie, clé primaire probable = categoryID, qualité élevée, risque minimal de perte d&#x27;information métier lors de la conversion numérique car les IDs sont simples sans zéros initiaux<ul><li>Vérifier que les clés categoryID ne contiennent jamais de zéros initiaux avant de les convertir</li><li>Ajouter un flag_duplicate_keys pour confirmer l&#x27;unicité des IDs</li><li>Conserver categoryName et description tels quels, aucun nettoyage supplémentaire nécessaire</li></ul></div>
+<table><tr><th>#</th><th>Outil</th><th>Colonne</th><th>Décision</th><th>Modifiées</th></tr>
+<tr class=''><td>1</td><td>Convertir en nombre</td><td>categoryID</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : Conversion en nombre de categoryID est sûre, les valeurs sont déjà numériques et ne comportent pas de zéros initiaux, ce qui facilite les jointures</td><td>0</td></tr>
+</table><table><tr><th>Colonne</th><th>Type avant</th><th>Type après</th><th>Vides avant</th><th>Vides après</th><th>Modifiées</th><th>Exemples</th></tr>
+<tr><td>categoryID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>categoryName</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>description</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+</table>
+<h2>customers</h2><p>91 → 91 lignes · 6 → 6 colonnes · doublons 0 → 0 · 1 valeur(s) modifiée(s)</p>
+<div class='llm'><b>Analyse LLM</b> (openai/gpt-oss-120b, rôle : dimension)<br>Table customers, probablement une dimension client avec grain d&#x27;une ligne par client (customerID unique). Les colonnes sont toutes de type texte, aucune valeur manquante, distinctes, donc la qualité est élevée. Risques majeurs : perte d&#x27;information métier si on modifie le format des identifiants ou des codes, mais le nettoyage proposé est sans risque.<ul><li>Vérifier manuellement l&#x27;absence d&#x27;espaces internes pertinents dans les noms d&#x27;entreprise</li><li>Appliquer éventuellement normalize_country sur la colonne country</li><li>Utiliser flag_duplicate_keys pour confirmer l&#x27;unicité de customerID</li><li>Contrôler l&#x27;encodage des caractères accentués avec fix_encoding si besoin</li></ul></div>
+<table><tr><th>#</th><th>Outil</th><th>Colonne</th><th>Décision</th><th>Modifiées</th></tr>
+<tr class=''><td>2</td><td>Supprimer les espaces superflus</td><td>companyName</td><td>1 valeur(s) avec espaces superflus | LLM : Le trim des espaces superflus sur companyName ne supprime aucune donnée métier et améliore la cohérence des libellés.</td><td>1</td></tr>
+</table><table><tr><th>Colonne</th><th>Type avant</th><th>Type après</th><th>Vides avant</th><th>Vides après</th><th>Modifiées</th><th>Exemples</th></tr>
+<tr><td>customerID</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>companyName</td><td>str</td><td>str</td><td>0</td><td>0</td><td>1</td><td>ligne 91 : <span class='old'>Wolski  Zajazd</span> → <span class='new'>Wolski Zajazd</span></td></tr>
+<tr><td>contactName</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>contactTitle</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>city</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>country</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+</table>
+<h2>employees</h2><p>9 → 9 lignes · 6 → 6 colonnes · doublons 0 → 0 · 0 valeur(s) modifiée(s)</p>
+<div class='llm'><b>Analyse LLM</b> (openai/gpt-oss-120b, rôle : dimension)<br>Table employees semble être une dimension avec grain d&#x27;employé unique, clé probable employeeID (distinct=9, pas de null). Les colonnes sont majoritairement textuelles, mais employeeID et reportsTo contiennent uniquement des chiffres sans zéros initiaux. Une valeur manquante apparaît dans reportsTo (manager inconnu). Risque principal : la conversion numérique pourrait casser des jointures si d&#x27;autres tables utilisent des chaînes pour ces IDs.<ul><li>Vérifier la cohérence du type de données employeeID et reportsTo avec les tables de faits ou de hiérarchie avant de les convertir.</li><li>Confirmer la politique d&#x27;imputation ou de gestion des valeurs manquantes de reportsTo (ex. manager top‑niveau).</li><li>Exécuter le flag_duplicate_keys pour s&#x27;assurer qu&#x27;employeeID reste unique.</li></ul></div>
+<table><tr><th>#</th><th>Outil</th><th>Colonne</th><th>Décision</th><th>Modifiées</th></tr>
+<tr class=''><td>3</td><td>Convertir en nombre</td><td>employeeID</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : employeeID ne comporte pas de zéros initiaux et est uniquement numérique, la conversion en nombre ne perd aucune information métier.</td><td>0</td></tr>
+<tr class=''><td>4</td><td>Convertir en nombre</td><td>reportsTo</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : reportsTo est également numérique et la conversion garde la valeur null, aucune perte d&#x27;information.</td><td>0</td></tr>
+<tr class='flag'><td>5</td><td>Signaler les valeurs manquantes</td><td>reportsTo</td><td>1 valeur(s) manquante(s) (11 %) : laissées vides, imputation soumise à validation humaine | LLM : flag_missing est un outil de signalement qui ne modifie pas les données et aide à repérer les managers manquants.</td><td>0</td></tr>
+</table><table><tr><th>Colonne</th><th>Type avant</th><th>Type après</th><th>Vides avant</th><th>Vides après</th><th>Modifiées</th><th>Exemples</th></tr>
+<tr><td>employeeID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>employeeName</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>title</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>city</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>country</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>reportsTo</td><td>str</td><td>Int64</td><td>1</td><td>1</td><td>0</td><td></td></tr>
+</table>
+<h2>order_details</h2><p>2155 → 2155 lignes · 5 → 5 colonnes · doublons 0 → 0 · 0 valeur(s) modifiée(s)</p>
+<div class='llm'><b>Analyse LLM</b> (openai/gpt-oss-120b, rôle : fait)<br>La table order_details représente probablement le grain ligne de commande (détail d&#x27;une commande) avec les colonnes orderID, productID, unitPrice, quantity et discount. Les colonnes sont actuellement de type texte mais contiennent uniquement des valeurs numériques, sans zéros initiaux apparents. Aucun null n&#x27;est présent, le nombre de lignes (2155) et de distincts indique une granularité fine. Le risque principal serait de perdre des informations d&#x27;identifiant si des zéros initiaux existaient, ce qui n&#x27;est pas le cas ici. Les flags d&#x27;anomalies sont utiles pour la validation métier.<ul><li>Vérifier auprès du propriétaire métier que les seuils d&#x27;outliers (unitPrice, quantity) sont pertinents.</li><li>Confirmer que la conversion de orderID et productID en numérique n&#x27;affecte pas d&#x27;éventuelles jointures externes basées sur des chaînes.</li><li>S&#x27;assurer que les valeurs négatives ou nulles n&#x27;apparaissent pas après conversion (ex. discount).</li></ul></div>
+<table><tr><th>#</th><th>Outil</th><th>Colonne</th><th>Décision</th><th>Modifiées</th></tr>
+<tr class=''><td>6</td><td>Convertir en nombre</td><td>orderID</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : Conversion sûre en nombre, aucun zéro initial détecté.</td><td>0</td></tr>
+<tr class=''><td>7</td><td>Convertir en nombre</td><td>productID</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : Conversion sûre en nombre, les IDs sont purement numériques.</td><td>0</td></tr>
+<tr class=''><td>8</td><td>Convertir en nombre</td><td>unitPrice</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : unitPrice doit être numérique pour les calculs de prix.</td><td>0</td></tr>
+<tr class=''><td>9</td><td>Convertir en nombre</td><td>quantity</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : quantity doit être numérique pour les agrégations.</td><td>0</td></tr>
+<tr class=''><td>10</td><td>Convertir en nombre</td><td>discount</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : discount est un taux numérique, conversion appropriée.</td><td>0</td></tr>
+<tr class='flag'><td>11</td><td>Signaler les valeurs extrêmes</td><td>unitPrice</td><td>60 valeur(s) extrême(s) hors [-48.00 ; 92.00] (écart interquartile x3) : signalées, non modifiées | LLM : Flag d&#x27;outliers conservé, aucune modification des données.</td><td>0</td></tr>
+<tr class='flag'><td>12</td><td>Signaler les valeurs extrêmes</td><td>quantity</td><td>24 valeur(s) extrême(s) hors [-50.00 ; 90.00] (écart interquartile x3) : signalées, non modifiées | LLM : Flag d&#x27;outliers conservé, aucune modification des données.</td><td>0</td></tr>
+</table><table><tr><th>Colonne</th><th>Type avant</th><th>Type après</th><th>Vides avant</th><th>Vides après</th><th>Modifiées</th><th>Exemples</th></tr>
+<tr><td>orderID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>productID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>unitPrice</td><td>str</td><td>Float64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>quantity</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>discount</td><td>str</td><td>Float64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+</table>
+<h2>orders</h2><p>830 → 830 lignes · 8 → 8 colonnes · doublons 0 → 0 · 0 valeur(s) modifiée(s)</p>
+<div class='llm'><b>Analyse LLM</b> (openai/gpt-oss-120b, rôle : fait)<br>La table orders semble être une table de faits au grain commande (une ligne par orderID), avec orderID comme clé primaire et des clés étrangères vers client, employé et transporteur. Les colonnes sont toutes en texte alors que plusieurs sont naturellement numériques ou dates, et il y a quelques valeurs manquantes sur shippedDate. Le risque principal est de casser les jointures si les clés sont converties différemment que dans les tables de dimensions.<ul><li>Valider manuellement la décision de garder orderID en texte ou le convertir en nombre pour assurer la cohérence avec les tables de dimensions.</li><li>Imputer ou traiter les 21 valeurs manquantes de shippedDate après validation métier.</li><li>Vérifier que les conversions numériques d&#x27;employeeID et shipperID correspondent aux types utilisés dans les tables de dimensions associées.</li></ul></div>
+<table><tr><th>#</th><th>Outil</th><th>Colonne</th><th>Décision</th><th>Modifiées</th></tr>
+<tr class='rejected'><td>13</td><td>Convertir en nombre</td><td>orderID</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : Convertir orderID en nombre pourrait rompre les jointures si les autres tables conservent cet identifiant en texte.</td><td>0</td></tr>
+<tr class=''><td>14</td><td>Convertir en nombre</td><td>employeeID</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : employeeID est purement numérique et aucune perte d&#x27;information n&#x27;est attendue.</td><td>0</td></tr>
+<tr class=''><td>15</td><td>Convertir en nombre</td><td>shipperID</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : shipperID ne comporte que des chiffres, la conversion en nombre est sûre.</td><td>0</td></tr>
+<tr class=''><td>16</td><td>Convertir en nombre</td><td>freight</td><td>100 % des valeurs sont numériques : conversion en nombre | LLM : freight représente des montants décimaux, la conversion en type numérique est appropriée.</td><td>0</td></tr>
+<tr class=''><td>17</td><td>Convertir en date</td><td>orderDate</td><td>100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ | LLM : orderDate est déjà au format ISO, la conversion en type date ne change rien au sens.</td><td>0</td></tr>
+<tr class=''><td>18</td><td>Convertir en date</td><td>requiredDate</td><td>100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ | LLM : requiredDate est également au format ISO, conversion en date recommandée.</td><td>0</td></tr>
+<tr class=''><td>19</td><td>Convertir en date</td><td>shippedDate</td><td>100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ | LLM : shippedDate contient des dates valides et des nulls, la conversion en date conserve les manquants.</td><td>0</td></tr>
+<tr class='flag'><td>20</td><td>Signaler les valeurs extrêmes</td><td>freight</td><td>34 valeur(s) extrême(s) hors [-220.77 ; 325.58] (écart interquartile x3) : signalées, non modifiées | LLM : Le flag outliers sur freight ne modifie pas les données et aide à repérer des valeurs anormales.</td><td>0</td></tr>
+<tr class='flag'><td>21</td><td>Signaler les valeurs manquantes</td><td>shippedDate</td><td>21 valeur(s) manquante(s) (3 %) : laissées vides, imputation soumise à validation humaine | LLM : Le flag missing sur shippedDate signale les 21 valeurs nulles sans les altérer.</td><td>0</td></tr>
+</table><table><tr><th>Colonne</th><th>Type avant</th><th>Type après</th><th>Vides avant</th><th>Vides après</th><th>Modifiées</th><th>Exemples</th></tr>
+<tr><td>orderID</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>customerID</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>employeeID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>orderDate</td><td>str</td><td>datetime64[us]</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>requiredDate</td><td>str</td><td>datetime64[us]</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>shippedDate</td><td>str</td><td>datetime64[us]</td><td>21</td><td>21</td><td>0</td><td></td></tr>
+<tr><td>shipperID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>freight</td><td>str</td><td>Float64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+</table>
+<h2>products</h2><p>77 → 77 lignes · 6 → 6 colonnes · doublons 0 → 0 · 1 valeur(s) modifiée(s)</p>
+<div class='llm'>LLM indisponible pour cette table (Groq HTTP 429 : {&quot;error&quot;:{&quot;message&quot;:&quot;Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7465, Requested 2345. Please try again in 13.575s. Need more tokens? Upgrade to Dev Tier today at https://con) : règles utilisées.</div>
+<table><tr><th>#</th><th>Outil</th><th>Colonne</th><th>Décision</th><th>Modifiées</th></tr>
+<tr class=''><td>22</td><td>Supprimer les espaces superflus</td><td>quantityPerUnit</td><td>1 valeur(s) avec espaces superflus</td><td>1</td></tr>
+<tr class=''><td>23</td><td>Convertir en nombre</td><td>productID</td><td>100 % des valeurs sont numériques : conversion en nombre</td><td>0</td></tr>
+<tr class=''><td>24</td><td>Convertir en nombre</td><td>unitPrice</td><td>100 % des valeurs sont numériques : conversion en nombre</td><td>0</td></tr>
+<tr class=''><td>25</td><td>Convertir en nombre</td><td>discontinued</td><td>100 % des valeurs sont numériques : conversion en nombre</td><td>0</td></tr>
+<tr class=''><td>26</td><td>Convertir en nombre</td><td>categoryID</td><td>100 % des valeurs sont numériques : conversion en nombre</td><td>0</td></tr>
+<tr class='flag'><td>27</td><td>Signaler les valeurs extrêmes</td><td>unitPrice</td><td>3 valeur(s) extrême(s) hors [-46.75 ; 93.25] (écart interquartile x3) : signalées, non modifiées</td><td>0</td></tr>
+</table><table><tr><th>Colonne</th><th>Type avant</th><th>Type après</th><th>Vides avant</th><th>Vides après</th><th>Modifiées</th><th>Exemples</th></tr>
+<tr><td>productID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>productName</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>quantityPerUnit</td><td>str</td><td>str</td><td>0</td><td>0</td><td>1</td><td>ligne 36 : <span class='old'>24 - 250 g  jars</span> → <span class='new'>24 - 250 g jars</span></td></tr>
+<tr><td>unitPrice</td><td>str</td><td>Float64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>discontinued</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>categoryID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+</table>
+<h2>shippers</h2><p>3 → 3 lignes · 2 → 2 colonnes · doublons 0 → 0 · 0 valeur(s) modifiée(s)</p>
+<div class='llm'>LLM indisponible pour cette table (Groq HTTP 429 : {&quot;error&quot;:{&quot;message&quot;:&quot;Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 7380, Requested 1792. Please try again in 8.79s. Need more tokens? Upgrade to Dev Tier today at https://conso) : règles utilisées.</div>
+<table><tr><th>#</th><th>Outil</th><th>Colonne</th><th>Décision</th><th>Modifiées</th></tr>
+<tr class=''><td>28</td><td>Convertir en nombre</td><td>shipperID</td><td>100 % des valeurs sont numériques : conversion en nombre</td><td>0</td></tr>
+</table><table><tr><th>Colonne</th><th>Type avant</th><th>Type après</th><th>Vides avant</th><th>Vides après</th><th>Modifiées</th><th>Exemples</th></tr>
+<tr><td>shipperID</td><td>str</td><td>Int64</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+<tr><td>companyName</td><td>str</td><td>str</td><td>0</td><td>0</td><td>0</td><td></td></tr>
+</table>

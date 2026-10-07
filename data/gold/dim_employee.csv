@@ -1,0 +1,11 @@
+employee_key,employee_id,employee_name,title,city,country,manager_id,manager_name
+-1,-1,Inconnu,Inconnu,Inconnu,Inconnu,,(aucun)
+1,1,Nancy Davolio,Sales Representative,New York,USA,8,Laura Callahan
+2,2,Andrew Fuller,Vice President Sales,New York,USA,,(aucun)
+3,3,Janet Leverling,Sales Representative,New York,USA,8,Laura Callahan
+4,4,Margaret Peacock,Sales Representative,New York,USA,8,Laura Callahan
+5,5,Steven Buchanan,Sales Manager,London,UK,2,Andrew Fuller
+6,6,Michael Suyama,Sales Representative,London,UK,5,Steven Buchanan
+7,7,Robert King,Sales Representative,London,UK,5,Steven Buchanan
+8,8,Laura Callahan,Sales Manager,New York,USA,2,Andrew Fuller
+9,9,Anne Dodsworth,Sales Representative,London,UK,5,Steven Buchanan

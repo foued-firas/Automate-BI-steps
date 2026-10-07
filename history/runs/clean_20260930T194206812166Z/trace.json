@@ -1,0 +1,645 @@
+{
+  "run_id": "clean_20260930T194206812166Z",
+  "finished_at": "2026-09-30T19:42:09+00:00",
+  "inputs": [
+    {
+      "file": "/mnt/attach/project-files/data/raw/categories.csv",
+      "sha256": "247a58c07dab5c39622ad4bf6fdacf3c8c688da5e418922d6049f29e8072a48b",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "categories"
+      ]
+    },
+    {
+      "file": "/mnt/attach/project-files/data/raw/customers.csv",
+      "sha256": "1108622425a4224d622576de7541b9cd5990239fb7a0934b19a5c806f4cb5367",
+      "encoding": "cp1252",
+      "delimiter": ",",
+      "tables": [
+        "customers"
+      ]
+    },
+    {
+      "file": "/mnt/attach/project-files/data/raw/employees.csv",
+      "sha256": "5ff38be204c857b820fc7ab213f8e7a884673f7ba6b0abfa62bbb237165e342b",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "employees"
+      ]
+    },
+    {
+      "file": "/mnt/attach/project-files/data/raw/order_details.csv",
+      "sha256": "c3ff191cf94ae777ed07e8633f1afd82328e1942a876a9d0df4648b3bbd35ce8",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "order_details"
+      ]
+    },
+    {
+      "file": "/mnt/attach/project-files/data/raw/orders.csv",
+      "sha256": "9f6138249c696169c48a75c3af1f4329031873e2cca269336078fe079772ccf6",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "orders"
+      ]
+    },
+    {
+      "file": "/mnt/attach/project-files/data/raw/products.csv",
+      "sha256": "004a8ac1cecbf5e1f1d3a504ff9fea20a422daeffd466bab990c9af6e449c1f4",
+      "encoding": "cp1252",
+      "delimiter": ",",
+      "tables": [
+        "products"
+      ]
+    },
+    {
+      "file": "/mnt/attach/project-files/data/raw/shippers.csv",
+      "sha256": "5776d698415453e46960334d4e79abf2d68e152fb02c661837fbc8103704d7b3",
+      "encoding": "utf-8-sig",
+      "delimiter": ",",
+      "tables": [
+        "shippers"
+      ]
+    }
+  ],
+  "tables": {
+    "categories": {
+      "source": "categories.csv",
+      "rows_before": 8,
+      "cols_before": 3,
+      "rows_after": 8,
+      "cols_after": 3
+    },
+    "customers": {
+      "source": "customers.csv",
+      "rows_before": 91,
+      "cols_before": 6,
+      "rows_after": 91,
+      "cols_after": 6
+    },
+    "employees": {
+      "source": "employees.csv",
+      "rows_before": 9,
+      "cols_before": 6,
+      "rows_after": 9,
+      "cols_after": 6
+    },
+    "order_details": {
+      "source": "order_details.csv",
+      "rows_before": 2155,
+      "cols_before": 5,
+      "rows_after": 2155,
+      "cols_after": 5
+    },
+    "orders": {
+      "source": "orders.csv",
+      "rows_before": 830,
+      "cols_before": 8,
+      "rows_after": 830,
+      "cols_after": 8
+    },
+    "products": {
+      "source": "products.csv",
+      "rows_before": 77,
+      "cols_before": 6,
+      "rows_after": 77,
+      "cols_after": 6
+    },
+    "shippers": {
+      "source": "shippers.csv",
+      "rows_before": 3,
+      "cols_before": 2,
+      "rows_after": 3,
+      "cols_after": 2
+    }
+  },
+  "planner": {
+    "mode": "rules",
+    "model": null,
+    "warning": null
+  },
+  "steps_applied": 22,
+  "steps_rejected": 0,
+  "issues_flagged": 6,
+  "status": "WARN",
+  "needs_human_validation": [
+    "employees.reportsTo : 1 valeur(s) manquante(s) (11 %) : laissées vides, imputation soumise à validation humaine",
+    "order_details.unitPrice : 60 valeur(s) extrême(s) hors [-48.00 ; 92.00] (écart interquartile x3) : signalées, non modifiées",
+    "order_details.quantity : 24 valeur(s) extrême(s) hors [-50.00 ; 90.00] (écart interquartile x3) : signalées, non modifiées",
+    "orders.freight : 34 valeur(s) extrême(s) hors [-220.77 ; 325.58] (écart interquartile x3) : signalées, non modifiées",
+    "orders.shippedDate : 21 valeur(s) manquante(s) (3 %) : laissées vides, imputation soumise à validation humaine",
+    "products.unitPrice : 3 valeur(s) extrême(s) hors [-46.75 ; 93.25] (écart interquartile x3) : signalées, non modifiées"
+  ],
+  "steps": [
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 1,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "categories",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "categoryID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 8,
+      "rows_after": 8,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 2,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "customers",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces superflus",
+      "kind": "fix",
+      "column": "companyName",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces superflus",
+      "params": {},
+      "rows_before": 91,
+      "rows_after": 91,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 91,
+          "avant": "Wolski  Zajazd",
+          "apres": "Wolski Zajazd"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 3,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "employees",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "employeeID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 4,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "employees",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "reportsTo",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 5,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "employees",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "reportsTo",
+      "status": "flagged",
+      "reason": "1 valeur(s) manquante(s) (11 %) : laissées vides, imputation soumise à validation humaine",
+      "params": {},
+      "rows_before": 9,
+      "rows_after": 9,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 6,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 7,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 8,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 9,
+      "timestamp": "2026-09-30T19:42:07+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "quantity",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 10,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "order_details",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "discount",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 11,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "order_details",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "unitPrice",
+      "status": "flagged",
+      "reason": "60 valeur(s) extrême(s) hors [-48.00 ; 92.00] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -48.0,
+        "high": 92.0
+      },
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 12,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "order_details",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "quantity",
+      "status": "flagged",
+      "reason": "24 valeur(s) extrême(s) hors [-50.00 ; 90.00] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -50.0,
+        "high": 90.0
+      },
+      "rows_before": 2155,
+      "rows_after": 2155,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 13,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 14,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "employeeID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 15,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "shipperID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 16,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "freight",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 17,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "orderDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 18,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "requiredDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 19,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "shippedDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 20,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "freight",
+      "status": "flagged",
+      "reason": "34 valeur(s) extrême(s) hors [-220.77 ; 325.58] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -220.77,
+        "high": 325.58
+      },
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 21,
+      "timestamp": "2026-09-30T19:42:08+00:00",
+      "table": "orders",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "shippedDate",
+      "status": "flagged",
+      "reason": "21 valeur(s) manquante(s) (3 %) : laissées vides, imputation soumise à validation humaine",
+      "params": {},
+      "rows_before": 830,
+      "rows_after": 830,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 22,
+      "timestamp": "2026-09-30T19:42:09+00:00",
+      "table": "products",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces superflus",
+      "kind": "fix",
+      "column": "quantityPerUnit",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces superflus",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 36,
+          "avant": "24 - 250 g  jars",
+          "apres": "24 - 250 g jars"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 23,
+      "timestamp": "2026-09-30T19:42:09+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 24,
+      "timestamp": "2026-09-30T19:42:09+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 25,
+      "timestamp": "2026-09-30T19:42:09+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "discontinued",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 26,
+      "timestamp": "2026-09-30T19:42:09+00:00",
+      "table": "products",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "categoryID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 27,
+      "timestamp": "2026-09-30T19:42:09+00:00",
+      "table": "products",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "unitPrice",
+      "status": "flagged",
+      "reason": "3 valeur(s) extrême(s) hors [-46.75 ; 93.25] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -46.75,
+        "high": 93.25
+      },
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T194206812166Z",
+      "step": 28,
+      "timestamp": "2026-09-30T19:42:09+00:00",
+      "table": "shippers",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "shipperID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 3,
+      "rows_after": 3,
+      "values_changed": 0,
+      "examples": []
+    }
+  ]
+}

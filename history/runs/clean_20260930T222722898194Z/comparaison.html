@@ -1,0 +1,60 @@
+<!doctype html><html lang='fr'><meta charset='utf-8'><title>Nettoyage : avant / après</title><style>
+:root{--text:#1f2328;--muted:#656d76;--border:#d8dee4;--accent:#5b3fd6;--soft:#f6f7f9;--ok:#1a7f37;--ok-bg:#dafbe1;--bad:#cf222e;--bad-bg:#ffebe9}
+body{font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:24px;color:var(--text);background:#fff;max-width:1100px}
+h1{font-size:22px;margin:0 0 4px}h2{font-size:17px;margin:32px 0 6px}.muted{color:var(--muted)}
+.kpis{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.kpi{border:1px solid var(--border);border-radius:8px;padding:10px 14px;min-width:150px}
+.kpi b{display:block;font-size:22px}.kpi span{color:var(--muted);font-size:12px}
+ul.done{list-style:none;padding:0;margin:8px 0}ul.done li{padding:4px 0}ul.done li:before{content:"✓ ";color:var(--ok);font-weight:700}
+.llm{background:#efeafe;border-left:4px solid var(--accent);padding:8px 12px;border-radius:6px;margin:8px 0}
+table{border-collapse:collapse;margin:8px 0;font-size:13px;width:100%}th,td{border-bottom:1px solid var(--border);padding:6px 8px;text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:600}td.ch{background:var(--ok-bg)}.old{display:block;color:var(--bad);text-decoration:line-through;font-size:12px}
+.new{font-weight:600}.chip{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--bad-bg);color:var(--bad);font-size:12px}
+ul.checks{list-style:none;padding:0;margin:8px 0}ul.checks li{padding:3px 0}ul.checks .ok:before{content:"✓ ";color:var(--ok);font-weight:700}
+ul.checks .ko:before{content:"✗ ";color:var(--bad);font-weight:700}ul.checks .info:before{content:"i ";color:var(--muted);font-weight:700}
+th.src,td.src{background:var(--soft)}
+</style>
+<h1>Nettoyage : avant / après</h1>
+<p class='muted'>categories.csv, customers.csv, employees.csv, order_details.csv, orders.csv, products.csv, shippers.csv · 2026-09-30T22:28:08+00:00 · analyse par openai/gpt-oss-120b</p>
+<div class='kpis'><div class='kpi'><b>3 / 7</b><span>tables traitées</span></div><div class='kpi'><b>158</b><span>corrections</span></div><div class='kpi'><b>0</b><span>lignes supprimées</span></div><div class='kpi'><b>7 / 7</b><span>tables prêtes pour l'ETL</span></div></div>
+<p class='muted'>Déjà propres, rien à faire : categories, employees, order_details, shippers</p>
+<h2>customers</h2><p class='muted'>customers.csv · 91 → 91 lignes</p>
+<div class='llm'><b>Analyse du LLM</b> : Table customers, grain probable = un client par ligne avec customerID comme clé primaire, toutes les colonnes sont des chaînes sans valeurs nulles, bonne distinctivité, aucune donnée numérique à convertir, risque faible de perte d&#x27;information.</div>
+<ul class='done'><li>1 texte avec des espaces en trop ou invisibles nettoyé <span class='muted'>(companyName)</span></li></ul>
+<p><b>Prêt pour l'ETL</b></p><ul class='checks'><li class='ok'>Noms de colonnes utilisables <span class='muted'>: sans espaces ni caractères spéciaux</span></li><li class='ok'>Chaque colonne a le bon type <span class='muted'>: 6 textes</span></li><li class='ok'>Clé unique <span class='muted'>: customerID identifie chaque ligne</span></li><li class='ok'>Aucune ligne en double</li></ul>
+<table><tr><th>Ligne</th><th>customerID</th><th>companyName</th></tr>
+<tr><td class='muted'>91</td><td>WOLZA</td><td class='ch'><span class='old'>Wolski··Zajazd</span><span class='new'>Wolski Zajazd</span></td></tr>
+</table>
+<h2>orders</h2><p class='muted'>orders.csv · 830 → 830 lignes</p>
+<ul class='done'><li>1 valeur extrême ramenée dans la plage habituelle <span class='muted'>(freight)</span></li></ul>
+<p><b>Prêt pour l'ETL</b></p><ul class='checks'><li class='ok'>Noms de colonnes utilisables <span class='muted'>: sans espaces ni caractères spéciaux</span></li><li class='ok'>Chaque colonne a le bon type <span class='muted'>: 4 nombres · 3 dates · 1 texte</span></li><li class='ok'>Clé unique <span class='muted'>: orderID identifie chaque ligne</span></li><li class='ok'>Aucune ligne en double</li><li class='ok'>Lien customerID vers customers <span class='muted'>: toutes les valeurs existent</span></li><li class='ok'>Lien employeeID vers employees <span class='muted'>: toutes les valeurs existent</span></li><li class='ok'>Lien shipperID vers shippers <span class='muted'>: toutes les valeurs existent</span></li><li class='ok'>shippedDate après orderDate <span class='muted'>: dates cohérentes</span></li></ul>
+<table><tr><th>Ligne</th><th>orderID</th><th>freight</th></tr>
+<tr><td class='muted'>725</td><td>10972</td><td class='ch'><span class='old'>0.02</span><span class='new'>0.12</span></td></tr>
+</table>
+<h2>products</h2><p class='muted'>products.csv · 77 → 77 lignes</p>
+<ul class='done'><li>2 textes avec des espaces en trop ou invisibles nettoyés <span class='muted'>(productName, quantityPerUnit)</span></li><li>77 valeurs oui / non uniformisées <span class='muted'>(discontinued)</span></li><li>77 conditionnements décomposés en colonnes exploitables <span class='muted'>(quantityPerUnit)</span></li></ul>
+<p><b>Nouvelles colonnes à partir de quantityPerUnit</b></p><table><tr><th class='src'>quantityPerUnit</th><th>nb_unites</th><th>taille_unite</th><th>unite_mesure</th><th>contenant</th><th>quantite_totale</th><th>unite_base</th></tr>
+<tr><td class='src'>10 boxes x 20 bags</td><td>200</td><td>(vide)</td><td>(vide)</td><td>bag</td><td>(vide)</td><td>(vide)</td></tr>
+<tr><td class='src'>24 - 12 oz bottles</td><td>24</td><td>12</td><td>oz</td><td>bottle</td><td>8517.17</td><td>ml</td></tr>
+<tr><td class='src'>12 - 550 ml bottles</td><td>12</td><td>550</td><td>ml</td><td>bottle</td><td>6600</td><td>ml</td></tr>
+<tr><td class='src'>48 - 6 oz jars</td><td>48</td><td>6</td><td>oz</td><td>jar</td><td>8164.66</td><td>g</td></tr>
+<tr><td class='src'>12 - 1 lb pkgs.</td><td>12</td><td>1</td><td>lb</td><td>package</td><td>5443.1</td><td>g</td></tr>
+<tr><td class='src'>18 - 500 g pkgs.</td><td>18</td><td>500</td><td>g</td><td>package</td><td>9000</td><td>g</td></tr>
+<tr><td class='src'>12 - 200 ml jars</td><td>12</td><td>200</td><td>ml</td><td>jar</td><td>2400</td><td>ml</td></tr>
+<tr><td class='src'>1 kg pkg.</td><td>1</td><td>1</td><td>kg</td><td>package</td><td>1000</td><td>g</td></tr>
+</table>
+<p><b>Prêt pour l'ETL</b></p><ul class='checks'><li class='ok'>Noms de colonnes utilisables <span class='muted'>: sans espaces ni caractères spéciaux</span></li><li class='ok'>Chaque colonne a le bon type <span class='muted'>: 6 nombres · 1 oui/non · 5 textes</span></li><li class='ok'>Clé unique <span class='muted'>: productID identifie chaque ligne</span></li><li class='ok'>Aucune ligne en double</li><li class='ok'>Lien categoryID vers categories <span class='muted'>: toutes les valeurs existent</span></li></ul>
+<table><tr><th>Ligne</th><th>productID</th><th>productName</th><th>quantityPerUnit</th><th>discontinued</th></tr>
+<tr><td class='muted'>1</td><td>1</td><td>Chai</td><td>10 boxes x 20 bags</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>2</td><td>2</td><td>Chang</td><td>24 - 12 oz bottles</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>3</td><td>3</td><td>Aniseed Syrup</td><td>12 - 550 ml bottles</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>4</td><td>4</td><td>Chef Anton&#x27;s Cajun Seasoning</td><td>48 - 6 oz jars</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>5</td><td>5</td><td>Chef Anton&#x27;s Gumbo Mix</td><td>36 boxes</td><td class='ch'><span class='old'>1</span><span class='new'>Oui</span></td></tr>
+<tr><td class='muted'>6</td><td>6</td><td>Grandma&#x27;s Boysenberry Spread</td><td>12 - 8 oz jars</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>7</td><td>7</td><td>Uncle Bob&#x27;s Organic Dried Pears</td><td>12 - 1 lb pkgs.</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>8</td><td>8</td><td>Northwoods Cranberry Sauce</td><td>12 - 12 oz jars</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>9</td><td>9</td><td>Mishi Kobe Niku</td><td>18 - 500 g pkgs.</td><td class='ch'><span class='old'>1</span><span class='new'>Oui</span></td></tr>
+<tr><td class='muted'>10</td><td>10</td><td>Ikura</td><td>12 - 200 ml jars</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>11</td><td>11</td><td>Queso Cabrales</td><td>1 kg pkg.</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+<tr><td class='muted'>12</td><td>12</td><td>Queso Manchego La Pastora</td><td>10 - 500 g pkgs.</td><td class='ch'><span class='old'>0</span><span class='new'>Non</span></td></tr>
+</table>
+<p class='muted'>… et 65 autres lignes modifiées (toutes sont dans les tables téléchargées).</p>

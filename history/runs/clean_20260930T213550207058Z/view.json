@@ -1,0 +1,419 @@
+{
+ "run_id": "clean_20260930T213550207058Z",
+ "finished_at": "2026-09-30T21:40:07+00:00",
+ "planner": {
+  "mode": "llm",
+  "model": "openai/gpt-oss-120b",
+  "warning": null
+ },
+ "files": [
+  "categories.csv",
+  "customers.csv",
+  "employees.csv",
+  "order_details.csv",
+  "orders.csv",
+  "products.csv",
+  "shippers.csv"
+ ],
+ "totals": {
+  "tables": 7,
+  "tables_to_process": 3,
+  "corrections": 36,
+  "rows_removed": 0,
+  "values_changed": 36
+ },
+ "tables": [
+  {
+   "name": "customers",
+   "source": "customers.csv",
+   "rows_before": 91,
+   "rows_after": 91,
+   "cols_before": 6,
+   "cols_after": 6,
+   "changed_cells": 1,
+   "changed_rows": 1,
+   "removed_count": 0,
+   "removed_columns": [],
+   "needs_work": true,
+   "actions": [
+    {
+     "tool": "trim_whitespace",
+     "count": 1,
+     "columns": [
+      "companyName"
+     ],
+     "text": "1 texte avec des espaces en trop nettoyé"
+    }
+   ],
+   "llm_refused": [],
+   "outliers": [],
+   "llm": {
+    "model": "openai/gpt-oss-120b",
+    "analysis": "Table customers, grain au niveau client avec customerID comme clé primaire, 91 enregistrements uniques, aucune valeur manquante, peu de colonnes textuelles, qualité globalement bonne mais quelques espaces superflus possibles.",
+    "role": "dimension",
+    "error": null
+   },
+   "grid": {
+    "columns": [
+     "customerID",
+     "companyName"
+    ],
+    "changed_columns": [
+     "companyName"
+    ],
+    "rows": [
+     {
+      "row": 91,
+      "cells": [
+       {
+        "before": "WOLZA",
+        "after": "WOLZA",
+        "changed": false
+       },
+       {
+        "before": "Wolski··Zajazd",
+        "after": "Wolski Zajazd",
+        "changed": true
+       }
+      ]
+     }
+    ],
+    "more": 0
+   },
+   "removed": {
+    "columns": [
+     "customerID",
+     "companyName",
+     "contactName",
+     "contactTitle",
+     "city"
+    ],
+    "rows": [],
+    "more": 0
+   }
+  },
+  {
+   "name": "orders",
+   "source": "orders.csv",
+   "rows_before": 830,
+   "rows_after": 830,
+   "cols_before": 8,
+   "cols_after": 8,
+   "changed_cells": 34,
+   "changed_rows": 34,
+   "removed_count": 0,
+   "removed_columns": [],
+   "needs_work": true,
+   "actions": [
+    {
+     "tool": "cap_outliers",
+     "count": 34,
+     "columns": [
+      "freight"
+     ],
+     "text": "34 valeurs extrêmes ramenées dans la plage habituelle"
+    }
+   ],
+   "llm_refused": [],
+   "outliers": [
+    {
+     "column": "freight",
+     "status": "applied",
+     "count": 34,
+     "text": "34 valeurs extrêmes : 34 au-dessus de 325.58"
+    }
+   ],
+   "llm": {
+    "model": "openai/gpt-oss-120b",
+    "analysis": null,
+    "role": null,
+    "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6898, Requested 2542. Please try again in 10.799999999s. Need more tokens? Upgrade to Dev Tier today at https"
+   },
+   "grid": {
+    "columns": [
+     "orderID",
+     "freight"
+    ],
+    "changed_columns": [
+     "freight"
+    ],
+    "rows": [
+     {
+      "row": 106,
+      "cells": [
+       {
+        "before": "10353",
+        "after": "10353",
+        "changed": false
+       },
+       {
+        "before": "360.63",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 125,
+      "cells": [
+       {
+        "before": "10372",
+        "after": "10372",
+        "changed": false
+       },
+       {
+        "before": "890.78",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 177,
+      "cells": [
+       {
+        "before": "10424",
+        "after": "10424",
+        "changed": false
+       },
+       {
+        "before": "370.61",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 183,
+      "cells": [
+       {
+        "before": "10430",
+        "after": "10430",
+        "changed": false
+       },
+       {
+        "before": "458.78",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 232,
+      "cells": [
+       {
+        "before": "10479",
+        "after": "10479",
+        "changed": false
+       },
+       {
+        "before": "708.95",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 263,
+      "cells": [
+       {
+        "before": "10510",
+        "after": "10510",
+        "changed": false
+       },
+       {
+        "before": "367.63",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 264,
+      "cells": [
+       {
+        "before": "10511",
+        "after": "10511",
+        "changed": false
+       },
+       {
+        "before": "350.64",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 267,
+      "cells": [
+       {
+        "before": "10514",
+        "after": "10514",
+        "changed": false
+       },
+       {
+        "before": "789.95",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 283,
+      "cells": [
+       {
+        "before": "10530",
+        "after": "10530",
+        "changed": false
+       },
+       {
+        "before": "339.22",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 293,
+      "cells": [
+       {
+        "before": "10540",
+        "after": "10540",
+        "changed": false
+       },
+       {
+        "before": "1007.64",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 358,
+      "cells": [
+       {
+        "before": "10605",
+        "after": "10605",
+        "changed": false
+       },
+       {
+        "before": "379.13",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     },
+     {
+      "row": 365,
+      "cells": [
+       {
+        "before": "10612",
+        "after": "10612",
+        "changed": false
+       },
+       {
+        "before": "544.08",
+        "after": "325.58",
+        "changed": true
+       }
+      ]
+     }
+    ],
+    "more": 22
+   },
+   "removed": {
+    "columns": [
+     "orderID",
+     "customerID",
+     "employeeID",
+     "orderDate",
+     "requiredDate"
+    ],
+    "rows": [],
+    "more": 0
+   }
+  },
+  {
+   "name": "products",
+   "source": "products.csv",
+   "rows_before": 77,
+   "rows_after": 77,
+   "cols_before": 6,
+   "cols_after": 6,
+   "changed_cells": 1,
+   "changed_rows": 1,
+   "removed_count": 0,
+   "removed_columns": [],
+   "needs_work": true,
+   "actions": [
+    {
+     "tool": "trim_whitespace",
+     "count": 1,
+     "columns": [
+      "quantityPerUnit"
+     ],
+     "text": "1 texte avec des espaces en trop nettoyé"
+    }
+   ],
+   "llm_refused": [],
+   "outliers": [
+    {
+     "column": "unitPrice",
+     "status": "kept",
+     "count": 0,
+     "text": "3 valeurs extrêmes : 3 au-dessus de 93.25"
+    }
+   ],
+   "llm": {
+    "model": "openai/gpt-oss-120b",
+    "analysis": null,
+    "role": null,
+    "error": "Groq HTTP 429 : {\"error\":{\"message\":\"Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01knan9xctf86rxcxc43emy5a5` service tier `on_demand` on tokens per minute (TPM): Limit 8000, Used 6641, Requested 2101. Please try again in 5.564999999s. Need more tokens? Upgrade to Dev Tier today at https:"
+   },
+   "grid": {
+    "columns": [
+     "productID",
+     "quantityPerUnit"
+    ],
+    "changed_columns": [
+     "quantityPerUnit"
+    ],
+    "rows": [
+     {
+      "row": 36,
+      "cells": [
+       {
+        "before": "36",
+        "after": "36",
+        "changed": false
+       },
+       {
+        "before": "24 - 250 g··jars",
+        "after": "24 - 250 g jars",
+        "changed": true
+       }
+      ]
+     }
+    ],
+    "more": 0
+   },
+   "removed": {
+    "columns": [
+     "productID",
+     "productName",
+     "quantityPerUnit",
+     "unitPrice",
+     "discontinued"
+    ],
+    "rows": [],
+    "more": 0
+   }
+  }
+ ],
+ "clean_tables": [
+  "categories",
+  "employees",
+  "order_details",
+  "shippers"
+ ]
+}

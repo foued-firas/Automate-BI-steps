@@ -1,0 +1,889 @@
+{
+  "run_id": "clean_20260930T193301409967Z",
+  "finished_at": "2026-09-30T19:33:02+00:00",
+  "inputs": [
+    {
+      "file": "cleaning_agent/samples/clients_sale.csv",
+      "sha256": "18b33967ec6c941c2f3d14d8005f0cfda07e6513a4e50ce4819be174d3c077ef",
+      "encoding": "cp1252",
+      "delimiter": ";",
+      "tables": [
+        "clients_sale"
+      ]
+    },
+    {
+      "file": "cleaning_agent/samples/ventes_sale.xlsx",
+      "sha256": "cc72b5e9dc275d2b000d6e23dca001fcd36908b833029f899408dab7f398f167",
+      "encoding": null,
+      "delimiter": null,
+      "tables": [
+        "ventes_sale_commandes",
+        "ventes_sale_lignes",
+        "ventes_sale_produits"
+      ]
+    }
+  ],
+  "tables": {
+    "clients_sale": {
+      "source": "clients_sale.csv",
+      "rows_before": 94,
+      "cols_before": 6,
+      "rows_after": 91,
+      "cols_after": 6
+    },
+    "ventes_sale_commandes": {
+      "source": "ventes_sale.xlsx / feuille commandes",
+      "rows_before": 120,
+      "cols_before": 8,
+      "rows_after": 120,
+      "cols_after": 8
+    },
+    "ventes_sale_lignes": {
+      "source": "ventes_sale.xlsx / feuille lignes",
+      "rows_before": 322,
+      "cols_before": 5,
+      "rows_after": 320,
+      "cols_after": 5
+    },
+    "ventes_sale_produits": {
+      "source": "ventes_sale.xlsx / feuille produits",
+      "rows_before": 77,
+      "cols_before": 6,
+      "rows_after": 77,
+      "cols_after": 6
+    }
+  },
+  "steps_applied": 28,
+  "issues_flagged": 9,
+  "status": "WARN",
+  "needs_human_validation": [
+    "clients_sale.contactTitle : 1 valeur(s) manquante(s) (1 %) : laissées vides, imputation soumise à validation humaine",
+    "clients_sale.city : 1 valeur(s) manquante(s) (1 %) : laissées vides, imputation soumise à validation humaine",
+    "ventes_sale_commandes.freight : 1 valeur(s) extrême(s) hors [-201.76 ; 292.73] (écart interquartile x3) : signalées, non modifiées",
+    "ventes_sale_commandes.shippedDate : 2 valeur(s) manquante(s) (2 %) : laissées vides, imputation soumise à validation humaine",
+    "ventes_sale_commandes.freight : 1 valeur(s) manquante(s) (1 %) : laissées vides, imputation soumise à validation humaine",
+    "ventes_sale_lignes.quantity : 1 valeur(s) négative(s) dans une colonne qui devrait être positive : à vérifier",
+    "ventes_sale_lignes.unitPrice : 9 valeur(s) extrême(s) hors [-41.00 ; 79.40] (écart interquartile x3) : signalées, non modifiées",
+    "ventes_sale_lignes.quantity : 1 valeur(s) extrême(s) hors [-50.00 ; 90.00] (écart interquartile x3) : signalées, non modifiées",
+    "ventes_sale_produits.unitPrice : 4 valeur(s) extrême(s) hors [-46.00 ; 94.00] (écart interquartile x3) : signalées, non modifiées"
+  ],
+  "steps": [
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 1,
+      "timestamp": "2026-09-30T19:33:01+00:00",
+      "table": "clients_sale",
+      "tool": "standardize_missing",
+      "label": "Uniformiser les valeurs manquantes",
+      "kind": "fix",
+      "column": "contactTitle",
+      "status": "applied",
+      "reason": "1 marqueur(s) de valeur manquante ['n/a'] remplacés par une vraie valeur vide",
+      "params": {
+        "tokens": [
+          "n/a"
+        ]
+      },
+      "rows_before": 94,
+      "rows_after": 94,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 4,
+          "avant": "N/A",
+          "apres": "(vide)"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 2,
+      "timestamp": "2026-09-30T19:33:01+00:00",
+      "table": "clients_sale",
+      "tool": "standardize_missing",
+      "label": "Uniformiser les valeurs manquantes",
+      "kind": "fix",
+      "column": "city",
+      "status": "applied",
+      "reason": "1 marqueur(s) de valeur manquante ['null'] remplacés par une vraie valeur vide",
+      "params": {
+        "tokens": [
+          "null"
+        ]
+      },
+      "rows_before": 94,
+      "rows_after": 94,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 11,
+          "avant": "null",
+          "apres": "(vide)"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 3,
+      "timestamp": "2026-09-30T19:33:01+00:00",
+      "table": "clients_sale",
+      "tool": "drop_empty_rows",
+      "label": "Supprimer les lignes vides",
+      "kind": "fix",
+      "column": null,
+      "status": "applied",
+      "reason": "1 ligne(s) entièrement vide(s)",
+      "params": {},
+      "rows_before": 94,
+      "rows_after": 93,
+      "values_changed": 1,
+      "examples": [
+        {
+          "lignes_supprimées": [
+            94
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 4,
+      "timestamp": "2026-09-30T19:33:01+00:00",
+      "table": "clients_sale",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces superflus",
+      "kind": "fix",
+      "column": "companyName",
+      "status": "applied",
+      "reason": "14 valeur(s) avec espaces superflus",
+      "params": {},
+      "rows_before": 93,
+      "rows_after": 93,
+      "values_changed": 14,
+      "examples": [
+        {
+          "row": 1,
+          "avant": "  Alfreds Futterkiste   ",
+          "apres": "Alfreds Futterkiste"
+        },
+        {
+          "row": 8,
+          "avant": "  Bólido Comidas preparadas   ",
+          "apres": "Bólido Comidas preparadas"
+        },
+        {
+          "row": 15,
+          "avant": "  Comércio Mineiro   ",
+          "apres": "Comércio Mineiro"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 5,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "clients_sale",
+      "tool": "fix_encoding",
+      "label": "Corriger l'encodage des accents",
+      "kind": "fix",
+      "column": "contactName",
+      "status": "applied",
+      "reason": "1 valeur(s) avec accents mal encodés (ex. 'Ã©' au lieu de 'é')",
+      "params": {},
+      "rows_before": 93,
+      "rows_after": 93,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 6,
+          "avant": "Christina BerglÃ¼nd",
+          "apres": "Christina Berglünd"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 6,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "clients_sale",
+      "tool": "normalize_country",
+      "label": "Standardiser les pays",
+      "kind": "fix",
+      "column": "country",
+      "status": "applied",
+      "reason": "22 nom(s) de pays standardisé(s) (ex. 'United States' -> 'USA')",
+      "params": {},
+      "rows_before": 93,
+      "rows_after": 93,
+      "values_changed": 22,
+      "examples": [
+        {
+          "row": 1,
+          "avant": "Deutschland",
+          "apres": "Germany"
+        },
+        {
+          "row": 6,
+          "avant": "germany",
+          "apres": "Germany"
+        },
+        {
+          "row": 7,
+          "avant": "france",
+          "apres": "France"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 7,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "clients_sale",
+      "tool": "drop_duplicates",
+      "label": "Supprimer les doublons exacts",
+      "kind": "fix",
+      "column": null,
+      "status": "applied",
+      "reason": "2 ligne(s) en double exact (2 %)",
+      "params": {},
+      "rows_before": 93,
+      "rows_after": 91,
+      "values_changed": 2,
+      "examples": [
+        {
+          "lignes_supprimées": [
+            92,
+            93
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 8,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "clients_sale",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "contactTitle",
+      "status": "flagged",
+      "reason": "1 valeur(s) manquante(s) (1 %) : laissées vides, imputation soumise à validation humaine",
+      "params": {},
+      "rows_before": 91,
+      "rows_after": 91,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 9,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "clients_sale",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "city",
+      "status": "flagged",
+      "reason": "1 valeur(s) manquante(s) (1 %) : laissées vides, imputation soumise à validation humaine",
+      "params": {},
+      "rows_before": 91,
+      "rows_after": 91,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 10,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "standardize_missing",
+      "label": "Uniformiser les valeurs manquantes",
+      "kind": "fix",
+      "column": "shippedDate",
+      "status": "applied",
+      "reason": "2 marqueur(s) de valeur manquante ['-', 'n/a'] remplacés par une vraie valeur vide",
+      "params": {
+        "tokens": [
+          "-",
+          "n/a"
+        ]
+      },
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 2,
+      "examples": [
+        {
+          "row": 3,
+          "avant": "N/A",
+          "apres": "(vide)"
+        },
+        {
+          "row": 10,
+          "avant": "-",
+          "apres": "(vide)"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 11,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "standardize_missing",
+      "label": "Uniformiser les valeurs manquantes",
+      "kind": "fix",
+      "column": "freight",
+      "status": "applied",
+      "reason": "1 marqueur(s) de valeur manquante ['inconnu'] remplacés par une vraie valeur vide",
+      "params": {
+        "tokens": [
+          "inconnu"
+        ]
+      },
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 51,
+          "avant": "inconnu",
+          "apres": "(vide)"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 12,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 13,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "employeeID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 14,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "shipperID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 15,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "freight",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre (119 au format texte, ex. virgule décimale ou symbole monétaire)",
+      "params": {},
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 119,
+      "examples": [
+        {
+          "row": 1,
+          "avant": "32,38 €",
+          "apres": "32.38"
+        },
+        {
+          "row": 2,
+          "avant": "11,61 €",
+          "apres": "11.61"
+        },
+        {
+          "row": 3,
+          "avant": "65,83 €",
+          "apres": "65.83"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 16,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "orderDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ (30 dans un autre format, lecture jour/mois)",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 30,
+      "examples": [
+        {
+          "row": 1,
+          "avant": "04/07/2013",
+          "apres": "2013-07-04T00:00:00.000000"
+        },
+        {
+          "row": 5,
+          "avant": "09/07/2013",
+          "apres": "2013-07-09T00:00:00.000000"
+        },
+        {
+          "row": 9,
+          "avant": "15/07/2013",
+          "apres": "2013-07-15T00:00:00.000000"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 17,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "requiredDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 18,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "parse_dates",
+      "label": "Convertir en date",
+      "kind": "fix",
+      "column": "shippedDate",
+      "status": "applied",
+      "reason": "100 % des valeurs sont des dates : conversion au format AAAA-MM-JJ",
+      "params": {
+        "dayfirst": true
+      },
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 19,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "freight",
+      "status": "flagged",
+      "reason": "1 valeur(s) extrême(s) hors [-201.76 ; 292.73] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -201.76,
+        "high": 292.73
+      },
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 20,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "shippedDate",
+      "status": "flagged",
+      "reason": "2 valeur(s) manquante(s) (2 %) : laissées vides, imputation soumise à validation humaine",
+      "params": {},
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 21,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_commandes",
+      "tool": "flag_missing",
+      "label": "Signaler les valeurs manquantes",
+      "kind": "flag",
+      "column": "freight",
+      "status": "flagged",
+      "reason": "1 valeur(s) manquante(s) (1 %) : laissées vides, imputation soumise à validation humaine",
+      "params": {},
+      "rows_before": 120,
+      "rows_after": 120,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 22,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces superflus",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces superflus",
+      "params": {},
+      "rows_before": 322,
+      "rows_after": 322,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 8,
+          "avant": " 14,00 ",
+          "apres": "14,00"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 23,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "orderID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 322,
+      "rows_after": 322,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 24,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 322,
+      "rows_after": 322,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 25,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre (1 au format texte, ex. virgule décimale ou symbole monétaire)",
+      "params": {},
+      "rows_before": 322,
+      "rows_after": 322,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 8,
+          "avant": "14,00",
+          "apres": "14"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 26,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "quantity",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 322,
+      "rows_after": 322,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 27,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "discount",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 322,
+      "rows_after": 322,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 28,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "drop_duplicates",
+      "label": "Supprimer les doublons exacts",
+      "kind": "fix",
+      "column": null,
+      "status": "applied",
+      "reason": "2 ligne(s) en double exact (1 %)",
+      "params": {},
+      "rows_before": 322,
+      "rows_after": 320,
+      "values_changed": 2,
+      "examples": [
+        {
+          "lignes_supprimées": [
+            321,
+            322
+          ]
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 29,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "flag_negative",
+      "label": "Signaler les valeurs négatives",
+      "kind": "flag",
+      "column": "quantity",
+      "status": "flagged",
+      "reason": "1 valeur(s) négative(s) dans une colonne qui devrait être positive : à vérifier",
+      "params": {},
+      "rows_before": 320,
+      "rows_after": 320,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 30,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "unitPrice",
+      "status": "flagged",
+      "reason": "9 valeur(s) extrême(s) hors [-41.00 ; 79.40] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -41.0,
+        "high": 79.4
+      },
+      "rows_before": 320,
+      "rows_after": 320,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 31,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_lignes",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "quantity",
+      "status": "flagged",
+      "reason": "1 valeur(s) extrême(s) hors [-50.00 ; 90.00] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -50.0,
+        "high": 90.0
+      },
+      "rows_before": 320,
+      "rows_after": 320,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 32,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_produits",
+      "tool": "trim_whitespace",
+      "label": "Supprimer les espaces superflus",
+      "kind": "fix",
+      "column": "quantityPerUnit",
+      "status": "applied",
+      "reason": "1 valeur(s) avec espaces superflus",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 1,
+      "examples": [
+        {
+          "row": 36,
+          "avant": "24 - 250 g  jars",
+          "apres": "24 - 250 g jars"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 33,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_produits",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "productID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 34,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_produits",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "unitPrice",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 35,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_produits",
+      "tool": "cast_numeric",
+      "label": "Convertir en nombre",
+      "kind": "fix",
+      "column": "categoryID",
+      "status": "applied",
+      "reason": "100 % des valeurs sont numériques : conversion en nombre",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 36,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_produits",
+      "tool": "cast_boolean",
+      "label": "Convertir en booléen",
+      "kind": "fix",
+      "column": "discontinued",
+      "status": "applied",
+      "reason": "valeurs oui/non hétérogènes ['non', 'oui'] : conversion en booléen",
+      "params": {},
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 77,
+      "examples": [
+        {
+          "row": 1,
+          "avant": "Non",
+          "apres": "False"
+        },
+        {
+          "row": 2,
+          "avant": "Non",
+          "apres": "False"
+        },
+        {
+          "row": 3,
+          "avant": "Non",
+          "apres": "False"
+        }
+      ]
+    },
+    {
+      "run_id": "clean_20260930T193301409967Z",
+      "step": 37,
+      "timestamp": "2026-09-30T19:33:02+00:00",
+      "table": "ventes_sale_produits",
+      "tool": "flag_outliers",
+      "label": "Signaler les valeurs extrêmes",
+      "kind": "flag",
+      "column": "unitPrice",
+      "status": "flagged",
+      "reason": "4 valeur(s) extrême(s) hors [-46.00 ; 94.00] (écart interquartile x3) : signalées, non modifiées",
+      "params": {
+        "low": -46.0,
+        "high": 94.0
+      },
+      "rows_before": 77,
+      "rows_after": 77,
+      "values_changed": 0,
+      "examples": []
+    }
+  ]
+}

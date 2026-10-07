@@ -1,0 +1,78 @@
+{
+  "run_id": "etl_20260930T194238Z",
+  "sources": {
+    "categories": "data/clean/categories.csv",
+    "customers": "data/clean/customers.csv",
+    "employees": "data/clean/employees.csv",
+    "order_details": "data/clean/order_details.csv",
+    "orders": "data/clean/orders.csv",
+    "products": "data/clean/products.csv",
+    "shippers": "data/clean/shippers.csv"
+  },
+  "columns": {
+    "fact_sales.gross_amount": {
+      "source": "order_details.unitPrice, order_details.quantity",
+      "rule": "unit_price * quantity"
+    },
+    "fact_sales.discount_amount": {
+      "source": "order_details.discount",
+      "rule": "gross_amount * discount"
+    },
+    "fact_sales.net_amount": {
+      "source": "order_details.*",
+      "rule": "gross_amount - discount_amount"
+    },
+    "fact_sales.freight_allocated": {
+      "source": "orders.freight",
+      "rule": "freight de la commande réparti au prorata du net_amount de chaque ligne"
+    },
+    "fact_sales.order_date_key": {
+      "source": "orders.orderDate",
+      "rule": "jointure orders.orderID, format AAAAMMJJ"
+    },
+    "fact_orders.days_to_ship": {
+      "source": "orders.orderDate, orders.shippedDate",
+      "rule": "shippedDate - orderDate en jours, vide si non expédiée"
+    },
+    "fact_orders.delay_days": {
+      "source": "orders.requiredDate, orders.shippedDate",
+      "rule": "shippedDate - requiredDate en jours, > 0 = retard"
+    },
+    "fact_orders.is_late": {
+      "source": "orders.requiredDate, orders.shippedDate",
+      "rule": "delay_days > 0"
+    },
+    "fact_orders.shipped_date_key": {
+      "source": "orders.shippedDate",
+      "rule": "AAAAMMJJ, -1 si non expédiée"
+    },
+    "fact_orders.order_net_amount": {
+      "source": "order_details.*",
+      "rule": "somme des montants nets des lignes"
+    },
+    "fact_orders.line_count": {
+      "source": "order_details.productID",
+      "rule": "nombre de lignes par commande"
+    },
+    "dim_product.category_name": {
+      "source": "categories.categoryName",
+      "rule": "jointure products.categoryID"
+    },
+    "dim_employee.manager_name": {
+      "source": "employees.employeeName",
+      "rule": "auto-jointure sur reportsTo"
+    },
+    "*.<dim>_key": {
+      "source": "aucune",
+      "rule": "clé de substitution 1..n, -1 = membre Inconnu"
+    },
+    "dim_date": {
+      "source": "orders.orderDate/requiredDate/shippedDate",
+      "rule": "calendrier continu sur les années couvertes"
+    },
+    "encodage": {
+      "source": "customers.csv, products.csv",
+      "rule": "lus en Latin-1, écrits en UTF-8 (accents corrigés)"
+    }
+  }
+}
